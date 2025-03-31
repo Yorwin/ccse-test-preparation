@@ -18,7 +18,6 @@ type UserAnswerType = {
 type QuestionGeneratorProps = {
     quantity: number;
     module: string;
-    onAnswer: () => void;
     initialQuestions?: Pregunta[];
     initialUserAnswers?: UserAnswerType;
     onQuestionsLoaded?: (questions: Pregunta[]) => void;
@@ -28,14 +27,16 @@ type QuestionGeneratorProps = {
 const QuestionGeneratorComponent = ({
     quantity,
     module,
-    onAnswer,
     initialQuestions = [],
     initialUserAnswers = {},
     onQuestionsLoaded,
     onUserAnswersChange }: QuestionGeneratorProps) => {
 
     const [questions, setQuestions] = useState<Pregunta[]>([]);
-    const [userAnswer, setUserAnswer] = useState<UserAnswerType>(initialUserAnswers);
+    const [userAnswer, setUserAnswer] = useState<UserAnswerType>(() => {
+        let savedAnswers = sessionStorage.getItem(`answers-module-${module}`);
+        return savedAnswers ? JSON.parse(savedAnswers) : initialUserAnswers;
+    });
     const [result, setResult] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -51,6 +52,18 @@ const QuestionGeneratorComponent = ({
     useEffect(() => {
 
         const loadQuestions = async () => {
+
+            if (sessionStorage.getItem(`questions-module-${module}`)) {
+                let savedQuestions = sessionStorage.getItem(`questions-module-${module}`);
+
+                if (savedQuestions) {
+                    const parsedQuestions = JSON.parse(savedQuestions) as Pregunta[];
+                    setQuestions(parsedQuestions);
+                }
+
+                setLoading(false);
+                return;
+            }
 
             if (initialQuestions.length > 0) {
                 setQuestions(initialQuestions);
@@ -96,6 +109,7 @@ const QuestionGeneratorComponent = ({
                 });
 
                 if (onQuestionsLoaded) {
+                    sessionStorage.setItem(`questions-module-${module}`, JSON.stringify(randomQuestions));
                     onQuestionsLoaded(randomQuestions);
                 }
 
@@ -120,11 +134,22 @@ const QuestionGeneratorComponent = ({
 
         setUserAnswer(newUserAnswers);
 
+        if (module.charAt(module.length - 1) === questionId.charAt(questionId.length - 1)) {
+
+            const savedAnswers = sessionStorage.getItem(`answers-module-${module}`);
+            const parsedAnswers = savedAnswers ? JSON.parse(savedAnswers) : {};
+
+            const updatedAnswers = {
+                ...parsedAnswers,
+                [questionId]: answerIndex
+            };
+
+            sessionStorage.setItem(`answers-module-${module}`, JSON.stringify(updatedAnswers));
+        }
+
         if (onUserAnswersChange) {
             onUserAnswersChange(newUserAnswers);
         }
-
-        onAnswer();
     };
 
     const handleResult = () => {

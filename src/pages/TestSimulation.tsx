@@ -42,8 +42,13 @@ const TestSimulation = () => {
     }
 
     const handleExitSimulation = () => {
+        sessionStorage.clear();
         navigate("/")
     }
+
+    useEffect(() => {
+
+    });
 
     useEffect(() => {
         setDisplayContenedorSimulacion(showConfirmMessage === true ? "hidden" : "visible");
@@ -68,7 +73,11 @@ const TestSimulation = () => {
         }))
     )
 
-    const [moduleToBeShown, setModuleToBeShown] = useState(0);
+    const [moduleToBeShown, setModuleToBeShown] = useState(() => {
+        const savedCurrentModule = sessionStorage.getItem("currentModule");
+        return savedCurrentModule ? Number(savedCurrentModule) : 0;
+    });
+
     const [buttonState, setButtonState] = useState(false);
     const [goBackArrowState, setGoBackArrowState] = useState(true);
     const [answeredQuestionsByModule, setAnsweredQuestionsByModule] = useState(
@@ -85,11 +94,12 @@ const TestSimulation = () => {
     }, []);
 
     const updateModuleAnswers = useCallback((moduleIndex: number, userAnswers: UserAnswerType) => {
-        setModuleQuestionStates(prev =>
-            prev.map((moduleState, index) =>
+        setModuleQuestionStates((prev) => {
+            return prev.map((moduleState, index) =>
                 index === moduleIndex ? { ...moduleState, userAnswers }
                     : moduleState
             )
+        }
         )
 
         setAnsweredQuestionsByModule(prev => {
@@ -98,9 +108,6 @@ const TestSimulation = () => {
             return newState
         });
     }, []);
-
-    const handleAnswer = () => {
-    };
 
     const handleNextModule = () => {
         if (moduleToBeShown < 4) {
@@ -134,12 +141,12 @@ const TestSimulation = () => {
 
     const renderQuestionGenerator = () => {
         const currentModuleState = moduleQuestionStates[moduleToBeShown];
+        sessionStorage.setItem('currentModule', `${moduleToBeShown}`);
 
         return (
             <QuestionGenerator
                 module={currentModuleState.module}
                 quantity={currentModuleState.quantity}
-                onAnswer={handleAnswer}
                 initialQuestions={currentModuleState.questions}
                 initialUserAnswers={currentModuleState.userAnswers}
                 onQuestionsLoaded={(questions) => updateModuleQuestions(moduleToBeShown, questions)}
@@ -148,8 +155,9 @@ const TestSimulation = () => {
         );
     }
 
+    const savedAnswers = sessionStorage.getItem(`answers-module-${modulosData[moduleToBeShown].module}`);
     const totalQuestionsInModule = modulosData[moduleToBeShown].quantity;
-    const answeredInCurrentModule = answeredQuestionsByModule[moduleToBeShown];
+    const answeredInCurrentModule = savedAnswers ? Object.keys(JSON.parse(savedAnswers)).length : answeredQuestionsByModule[moduleToBeShown];
     const progressPercentage = (answeredInCurrentModule / totalQuestionsInModule) * 100;
 
     return <>

@@ -16,7 +16,13 @@ const CounterContext = createContext<CounterContextType | undefined>(undefined);
 
 export const CounterProvider = ({ children }: CounterPropsType) => {
 
-    const [timeLeft, setTimeLeft] = useState(25 * 60);
+    const defaultTime = 25 * 60;
+
+    const [timeLeft, setTimeLeft] = useState(() => {
+        const savedTime = sessionStorage.getItem("cronometro");
+        return savedTime ? Number(savedTime) : defaultTime;
+    });
+
     const [isActive, setIsActive] = useState(true);
 
     useEffect(() => {
@@ -25,7 +31,9 @@ export const CounterProvider = ({ children }: CounterPropsType) => {
         if (isActive && timeLeft > 0) {
             timer = setInterval(() => {
                 setTimeLeft((prevTime) => prevTime - 1);
+                sessionStorage.setItem("cronometro", `${timeLeft}`);
             }, 1000);
+
         } else if (timeLeft === 0) {
             if (timer) clearInterval(timer);
             alert("¡Tiempo Terminado!");
