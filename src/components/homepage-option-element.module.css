@@ -1,0 +1,30 @@
+.contenedor-opcion {
+    display: flex;
+    align-items: center;
+}
+
+.contenedor-opcion i {
+    color: #FA3B2D;
+    font-size: 3rem;
+    margin-right: 1.3rem;
+}
+
+.contenedor-texto h3 {
+    color: #CF4037;
+    max-width: 75%;
+}
+
+.contenedor-texto p {
+    color: #322B2A;
+    max-width: 90%;
+}
+
+.contenedor-texto a {
+    text-decoration: none;
+} 
+
+@media screen and (max-width: 768px){
+    .contenedor-opcion {
+        padding-left: 2rem;
+    }
+}

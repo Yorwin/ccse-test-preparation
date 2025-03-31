@@ -1,0 +1,88 @@
+.main-container-confirm-exit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    background-color: #fff;
+    opacity: 1;
+}
+
+.container-confirm-exit {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.container-confirm-exit {
+    font-size: 1.1rem;
+}
+
+.first-text-part {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: .5rem;
+    font-weight: 700;
+}
+
+.first-text-part p {
+    padding-left: 0.4rem;
+    margin-bottom: 0rem;
+}
+
+.first-text-part i {
+    font-size: 2rem;
+}
+
+.second-text-part {
+    width: 40%;
+}
+
+.second-text-part p {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.4rem;
+}
+
+.options-list {
+    display: flex;
+    list-style-type: none;
+}
+
+.options-list li {
+    display: flex;
+    align-items: center;
+}
+
+.options-list li i {
+    color: #CF4037;
+    cursor: default;
+    font-size: 1.4rem;
+}
+
+.container-buttons {
+    display: flex;
+    width: 25%;
+    justify-content: space-around;
+}
+
+.container-buttons button {
+    background-color: transparent;
+    border: none;
+    background-color: #CF4037;
+    border-radius: .3rem;
+    color: #fff;
+    font-weight: 600;
+    margin: 1rem;
+}
+
+.container-buttons button {
+    width: 140px;
+    height: 50px;
+}

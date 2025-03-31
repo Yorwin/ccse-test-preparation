@@ -1,0 +1,9 @@
+.counter-main-container {
+    border: 0.1rem #A55A55 solid;
+    padding: 1.4rem 2.6rem;
+    border-radius: 1.4rem;
+}
+
+.counter-main-container h2 {
+    margin-bottom: 0rem;
+}
