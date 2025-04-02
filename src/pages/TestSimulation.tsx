@@ -8,6 +8,8 @@ import ArrowGoBack from "../components/arrow-go-back";
 import QuestionGenerator from "../components/question-generator";
 import FinishTestMessage from "../components/finishTestSimulation";
 import { useNavigate } from "react-router-dom";
+import CheckTestSimulation from "../components/checkTestSimulation";
+import TestResults from "../components/testResults";
 import styles from "../styles-pages/test-simulation.module.css";
 import ControlSimulationButtons from "../components/control-simulation-buttons";
 
@@ -31,6 +33,20 @@ type ModuleQuestionState = {
 
 const TestSimulation = () => {
 
+    //Evaluar Simulación.
+
+    const [showResultsTest, setShowResultsTest] = useState(false);
+    const [showCheckTestMessage, setShowCheckTestMessage] = useState(false);
+
+    const handleShowCheckTestMessage = () => {
+        setShowCheckTestMessage(current => !current)
+    }
+
+    const showResults = () => {
+        setShowCheckTestMessage(current => !current)
+        setShowResultsTest(current => !current)
+    };
+
     //Salir de Simulacion.
 
     const [showConfirmMessage, setShowConfirmMessage] = useState(false);
@@ -47,12 +63,8 @@ const TestSimulation = () => {
     }
 
     useEffect(() => {
-
-    });
-
-    useEffect(() => {
-        setDisplayContenedorSimulacion(showConfirmMessage === true ? "hidden" : "visible");
-    }, [showConfirmMessage])
+        setDisplayContenedorSimulacion(showConfirmMessage || showCheckTestMessage || showResultsTest === true ? "hidden" : "visible");
+    }, [showConfirmMessage, showCheckTestMessage, showResultsTest])
 
     //Preguntas
 
@@ -119,8 +131,6 @@ const TestSimulation = () => {
         if (moduleToBeShown !== 0) {
             setModuleToBeShown(currentValue => currentValue - 1);
         }
-
-        console.log(moduleToBeShown);
     };
 
     useEffect(() => {
@@ -165,6 +175,8 @@ const TestSimulation = () => {
             <div className={styles["main-container-test-simulation"]} style={{ overflow: `${displayContenedorSimulacion}` }}>
 
                 {showConfirmMessage ? <FinishTestMessage cancelExitSimulation={handleConfirmMessage} continueExitSimulation={handleExitSimulation} stateShowConfirmMessage={showConfirmMessage} /> : null}
+                {showCheckTestMessage ? <CheckTestSimulation cancelShowCheckTestMessage={handleShowCheckTestMessage} showResults={showResults} /> : null}
+                {showResultsTest ? <TestResults /> : null }
 
                 <div className={styles["container-header-element"]}>
                     <div className={styles["header-styler-container"]}>
@@ -185,7 +197,7 @@ const TestSimulation = () => {
                     {renderQuestionGenerator()}
                 </div>
                 <div className={styles["control-simulation-buttons-container"]}>
-                    <ControlSimulationButtons nextModule={handleNextModule} buttonState={buttonState} />
+                    <ControlSimulationButtons nextModule={handleNextModule} showCheckTest={handleShowCheckTestMessage} buttonState={buttonState} />
                 </div>
             </div>
         </CounterProvider>

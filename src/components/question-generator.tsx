@@ -33,10 +33,8 @@ const QuestionGeneratorComponent = ({
     onUserAnswersChange }: QuestionGeneratorProps) => {
 
     const [questions, setQuestions] = useState<Pregunta[]>([]);
-    const [userAnswer, setUserAnswer] = useState<UserAnswerType>(() => {
-        let savedAnswers = sessionStorage.getItem(`answers-module-${module}`);
-        return savedAnswers ? JSON.parse(savedAnswers) : initialUserAnswers;
-    });
+    const [userAnswer, setUserAnswer] = useState<UserAnswerType>(initialUserAnswers || {});
+
     const [result, setResult] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -48,6 +46,17 @@ const QuestionGeneratorComponent = ({
     };
 
     const obtainRandomQuestions = useMemo(() => shuffleAndSelectQuestions, []);
+
+    useEffect(() => {
+        const savedAnswers = sessionStorage.getItem(`answers-module-${module}`);
+
+        if (savedAnswers) {
+            setUserAnswer(JSON.parse(savedAnswers));
+        } else {
+            setUserAnswer(initialUserAnswers || {});
+        }
+
+    }, [module, initialUserAnswers]);
 
     useEffect(() => {
 
