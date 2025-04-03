@@ -10,6 +10,7 @@ import FinishTestMessage from "../components/finishTestSimulation";
 import { useNavigate } from "react-router-dom";
 import CheckTestSimulation from "../components/checkTestSimulation";
 import TestResults from "../components/testResults";
+import { saveResultsTest, getUserResults, getDetailsResult } from "../config/firebase";
 import styles from "../styles-pages/test-simulation.module.css";
 import ControlSimulationButtons from "../components/control-simulation-buttons";
 
@@ -37,6 +38,8 @@ const TestSimulation = () => {
 
     const [showResultsTest, setShowResultsTest] = useState(false);
     const [showCheckTestMessage, setShowCheckTestMessage] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [answers, setAnswers] = useState({});
 
     const handleShowCheckTestMessage = () => {
         setShowCheckTestMessage(current => !current)
@@ -45,6 +48,13 @@ const TestSimulation = () => {
     const showResults = () => {
         setShowCheckTestMessage(current => !current)
         setShowResultsTest(current => !current)
+    };
+
+    const selectAnswer = ({questionId, selectedOption} : {questionId: string, selectedOption : number}) : void => {
+        setAnswers({
+            ...answers,
+            [questionId] : selectedOption
+        })
     };
 
     //Salir de Simulacion.
@@ -161,6 +171,7 @@ const TestSimulation = () => {
                 initialUserAnswers={currentModuleState.userAnswers}
                 onQuestionsLoaded={(questions) => updateModuleQuestions(moduleToBeShown, questions)}
                 onUserAnswersChange={(userAnswers) => updateModuleAnswers(moduleToBeShown, userAnswers)}
+                selectAnswer = {(selectedAnswer) => selectAnswer(selectedAnswer)}
             />
         );
     }
@@ -176,7 +187,7 @@ const TestSimulation = () => {
 
                 {showConfirmMessage ? <FinishTestMessage cancelExitSimulation={handleConfirmMessage} continueExitSimulation={handleExitSimulation} stateShowConfirmMessage={showConfirmMessage} /> : null}
                 {showCheckTestMessage ? <CheckTestSimulation cancelShowCheckTestMessage={handleShowCheckTestMessage} showResults={showResults} /> : null}
-                {showResultsTest ? <TestResults /> : null }
+                {showResultsTest ? <TestResults /> : null}
 
                 <div className={styles["container-header-element"]}>
                     <div className={styles["header-styler-container"]}>

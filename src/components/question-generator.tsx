@@ -22,6 +22,7 @@ type QuestionGeneratorProps = {
     initialUserAnswers?: UserAnswerType;
     onQuestionsLoaded?: (questions: Pregunta[]) => void;
     onUserAnswersChange?: (userAnswers: UserAnswerType) => void;
+    selectAnswer: (selectedAnswer: {questionId: string, selectedOption : number}) => void;
 };
 
 const QuestionGeneratorComponent = ({
