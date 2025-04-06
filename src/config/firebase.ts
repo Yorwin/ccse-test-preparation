@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { getResult, SaveResults } from "../types";
+import { useRef } from "react";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -54,7 +55,7 @@ export const saveResultsTest = async ({ testId, score, answers, duration }: Save
     }
 
     //Guardar en FireStore
-    const docRef = await addDoc(collection(db, 'results'), result)
+    const docRef = await addDoc(collection(db, 'users', user.uid, 'resultados'), result);
     return docRef.id;
 
   } catch (error) {

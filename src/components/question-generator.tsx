@@ -22,7 +22,6 @@ type QuestionGeneratorProps = {
     initialUserAnswers?: UserAnswerType;
     onQuestionsLoaded?: (questions: Pregunta[]) => void;
     onUserAnswersChange?: (userAnswers: UserAnswerType) => void;
-    selectAnswer: (selectedAnswer: {questionId: string, selectedOption : number}) => void;
 };
 
 const QuestionGeneratorComponent = ({
@@ -86,9 +85,6 @@ const QuestionGeneratorComponent = ({
             try {
                 const preguntasRef = collection(db, "preguntas", module, "preguntas");
                 const querySnapShot = await getDocs(preguntasRef);
-
-                // Verifica cuántos documentos estás recibiendo
-                console.log("Número de preguntas obtenidas:", querySnapShot.size);
 
                 if (querySnapShot.empty) {
                     console.log("No se encontraron preguntas en Firestore para este módulo.");

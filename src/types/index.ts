@@ -18,10 +18,14 @@ export type AnswersResults = {
     answer : number,
 }
 
+interface verifiedAnswersBeforeResults {
+    [code: string]: number;
+}
+
 export interface SaveResults {
     testId : string,
     score : number, 
-    answers : AnswersResults[];
+    answers : verifiedAnswersBeforeResults[];
     duration : number,
 }
 

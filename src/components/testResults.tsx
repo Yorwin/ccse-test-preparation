@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./checkTestSimulation.module.css"
 import { useNavigate } from "react-router-dom";
 
-const TestResults = () => {
+const TestResults = ({results, total} : {results: number, total: number}) => {
 
     const navigate = useNavigate();
 
@@ -15,8 +15,8 @@ const TestResults = () => {
         <div className={styles["test-results-main-container"]}>
             <h2>Resultados Test</h2>
             <div className={styles["results-data-container"]}>
-                <p>Cantidad de aciertos: 23</p>
-                <p>Cantidad de fallos: 2</p>
+                <p>Cantidad de aciertos: {results}</p>
+                <p>Cantidad de fallos: {total - results}</p>
             </div>
             <div className={styles["go-home-button"]}>
                 <button onClick={goHome}>

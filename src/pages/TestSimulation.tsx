@@ -8,6 +8,8 @@ import ArrowGoBack from "../components/arrow-go-back";
 import QuestionGenerator from "../components/question-generator";
 import FinishTestMessage from "../components/finishTestSimulation";
 import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
 import CheckTestSimulation from "../components/checkTestSimulation";
 import TestResults from "../components/testResults";
 import { saveResultsTest, getUserResults, getDetailsResult } from "../config/firebase";
@@ -32,29 +34,100 @@ type ModuleQuestionState = {
     userAnswers: UserAnswerType;
 }
 
+interface verifiedAnswersBeforeResults {
+    [code: string]: number;
+}
+
+type PreguntaData = {
+    correcta: number;
+    [key: string]: any;
+};
+
 const TestSimulation = () => {
 
     //Evaluar Simulación.
 
     const [showResultsTest, setShowResultsTest] = useState(false);
     const [showCheckTestMessage, setShowCheckTestMessage] = useState(false);
+    const [results, setResults] = useState(0);
+    const [totalQuestions, setTotalQuestions] = useState(0);
     const [saving, setSaving] = useState(false);
-    const [answers, setAnswers] = useState({});
 
     const handleShowCheckTestMessage = () => {
         setShowCheckTestMessage(current => !current)
     }
 
-    const showResults = () => {
-        setShowCheckTestMessage(current => !current)
-        setShowResultsTest(current => !current)
+    const showResults = async () => {
+
+        setSaving(true);
+
+        try {
+            const resultsTest = await verificarRespuestas();
+            await saveResultsTest(resultsTest);
+            setSaving(false);
+        } catch (error) {
+            console.error("Error al guardar el test", error);
+            setSaving(false);
+        } finally {
+            setShowCheckTestMessage(current => !current)
+            setShowResultsTest(current => !current)
+        }
     };
 
-    const selectAnswer = ({questionId, selectedOption} : {questionId: string, selectedOption : number}) : void => {
-        setAnswers({
-            ...answers,
-            [questionId] : selectedOption
-        })
+    const getQuestionData = async (
+        Id_pregunta: string,
+        modulo: string
+    ): Promise<(PreguntaData & { id: string }) | null> => {
+        const docRef = doc(db, "preguntas", modulo, "preguntas", Id_pregunta);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return { id: docSnap.id, ...docSnap.data() as PreguntaData };
+        } else {
+            console.log("No se encontró la pregunta.");
+            return null;
+        }
+    };
+
+    const verificarRespuestas = async () => {
+
+        let testId = "test_simulation";
+        let total = modulosData.reduce((sum, item) => sum + item.quantity, 0);
+        let getDuration = Number(sessionStorage.getItem("cronometro"));
+        let score = 0;
+
+        let arrayAllAnswers: verifiedAnswersBeforeResults[] = [];
+
+        for (let i = 1; i <= 5; i++) {
+            const gottenItem = sessionStorage.getItem(`answers-module-Modulo_${i}`);
+            const convertedItem = gottenItem ? JSON.parse(gottenItem) : null;
+
+            if (convertedItem) {
+                arrayAllAnswers.push(convertedItem);
+            }
+        }
+
+        for (let index = 0; index < arrayAllAnswers.length; index++) {
+            const respuestasModulo = arrayAllAnswers[index];
+            const modulo = `Modulo_${index + 1}`;
+            const preguntas = Object.entries(respuestasModulo); // [ [idPregunta, respuesta], ... ]
+
+            for (const [idPregunta, respuesta] of preguntas) {
+                const questionInfo = await getQuestionData(idPregunta, modulo);
+                const isCorrect = questionInfo?.correcta === respuesta;
+                if (isCorrect) score++;
+            }
+        }
+
+        setResults(score);
+        setTotalQuestions(total);
+
+        return {
+            testId,
+            score: score,
+            answers: arrayAllAnswers,
+            duration: getDuration,
+        }
     };
 
     //Salir de Simulacion.
@@ -171,7 +244,6 @@ const TestSimulation = () => {
                 initialUserAnswers={currentModuleState.userAnswers}
                 onQuestionsLoaded={(questions) => updateModuleQuestions(moduleToBeShown, questions)}
                 onUserAnswersChange={(userAnswers) => updateModuleAnswers(moduleToBeShown, userAnswers)}
-                selectAnswer = {(selectedAnswer) => selectAnswer(selectedAnswer)}
             />
         );
     }
@@ -187,7 +259,7 @@ const TestSimulation = () => {
 
                 {showConfirmMessage ? <FinishTestMessage cancelExitSimulation={handleConfirmMessage} continueExitSimulation={handleExitSimulation} stateShowConfirmMessage={showConfirmMessage} /> : null}
                 {showCheckTestMessage ? <CheckTestSimulation cancelShowCheckTestMessage={handleShowCheckTestMessage} showResults={showResults} /> : null}
-                {showResultsTest ? <TestResults /> : null}
+                {showResultsTest ? <TestResults results={results} total={totalQuestions} /> : null}
 
                 <div className={styles["container-header-element"]}>
                     <div className={styles["header-styler-container"]}>
