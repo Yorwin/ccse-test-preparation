@@ -16,4 +16,4 @@ const ControlSimulationButtons = ({nextModule, buttonState, showCheckTest}: Cont
     </>
 };
 
-export default ControlSimulationButtons;
+export default React.memo(ControlSimulationButtons);

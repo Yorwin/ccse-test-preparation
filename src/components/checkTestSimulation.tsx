@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./checkTestSimulation.module.css"
+import { useCounter } from "../context/SimulationCounterContext";
 
 interface CheckTestSimulationProps {
     cancelShowCheckTestMessage : () => void,
@@ -7,6 +8,18 @@ interface CheckTestSimulationProps {
 }
 
 const CheckTestSimulation = ({ cancelShowCheckTestMessage, showResults }: CheckTestSimulationProps) => {
+
+    const { pauseTimer, startTimer } = useCounter();
+
+    useEffect(() => {
+        pauseTimer();
+    });
+
+    const handleCancelShowTestMessage = () => {
+        cancelShowCheckTestMessage();
+        startTimer();
+    };
+
     return <>
         <div className={styles["main-container-check-test"]}>
             <div className={styles["check-container"]}>
@@ -18,7 +31,7 @@ const CheckTestSimulation = ({ cancelShowCheckTestMessage, showResults }: CheckT
                     <p>Si necesitas revisar algo, puedes volver atrás.</p>
                 </div>
                 <div className={styles["container-buttons"]}>
-                    <button onClick={cancelShowCheckTestMessage}>No quiero confirmar aún</button>
+                    <button onClick={handleCancelShowTestMessage}>No quiero confirmar aún</button>
                     <button onClick={showResults}>Confirmar y enviar</button>
                 </div>
             </div>

@@ -1,0 +1,76 @@
+.main-container-tests {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: .7rem 2rem;
+    border-radius: 1.2rem;
+    width: 260px;
+    height: 200px;
+    background-color: #A55A55;
+    position: relative;
+}
+
+.main-container-tests h2 {
+    font-size: 1.2rem
+}
+
+.main-container-tests small {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.data-container {
+    text-align: center;
+    width: 100%;
+    margin-bottom: .7rem;
+}
+
+.shared-data-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.shared-data-container div {
+    text-align: center;
+}
+
+.container-icon {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 3rem;
+    height: 3rem;
+}
+
+.container-icon i {
+    background-color: #FA3B2D;
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
+    font-size: 1.6rem;
+}
+
+.total-hours {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.amount-hours {
+    font-size: 2.4rem;
+}
+
+.parragraph-simulated-hours {
+    position: absolute;
+    width: 70%;
+    line-height: 1.5rem;
+    bottom: 15px;
+    left: 15px;
+    font-size: 1.4rem;
+    margin-bottom: 0rem;
+}

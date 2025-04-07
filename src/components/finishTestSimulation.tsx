@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useCounter } from "../context/SimulationCounterContext";
 import styles from "./finishTestMessage.module.css";
 
-const FinishTestMessage = ({ cancelExitSimulation, continueExitSimulation, stateShowConfirmMessage }: { cancelExitSimulation: () => void, continueExitSimulation: () => void, stateShowConfirmMessage: boolean }) => {
+const FinishTestMessage = ({ cancelExitSimulation, continueExitSimulation }: { cancelExitSimulation: () => void, continueExitSimulation: () => void }) => {
 
     const { pauseTimer, startTimer } = useCounter();
 

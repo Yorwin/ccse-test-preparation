@@ -12,9 +12,10 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import CheckTestSimulation from "../components/checkTestSimulation";
 import TestResults from "../components/testResults";
-import { saveResultsTest, getUserResults, getDetailsResult } from "../config/firebase";
+import { saveResultsTest } from "../config/firebase";
 import styles from "../styles-pages/test-simulation.module.css";
 import ControlSimulationButtons from "../components/control-simulation-buttons";
+import LoadingScreen from "../components/LoadingScreen";
 
 type Pregunta = {
     id: string;
@@ -47,6 +48,7 @@ const TestSimulation = () => {
 
     //Evaluar Simulación.
 
+    const [showTestSimulation, setShowTestSimulation] = useState(true);
     const [showResultsTest, setShowResultsTest] = useState(false);
     const [showCheckTestMessage, setShowCheckTestMessage] = useState(false);
     const [results, setResults] = useState(0);
@@ -60,6 +62,8 @@ const TestSimulation = () => {
     const showResults = async () => {
 
         setSaving(true);
+        setShowCheckTestMessage(current => !current)
+        setShowTestSimulation(current => !current)
 
         try {
             const resultsTest = await verificarRespuestas();
@@ -67,9 +71,8 @@ const TestSimulation = () => {
             setSaving(false);
         } catch (error) {
             console.error("Error al guardar el test", error);
-            setSaving(false);
         } finally {
-            setShowCheckTestMessage(current => !current)
+            setSaving(false);
             setShowResultsTest(current => !current)
         }
     };
@@ -232,7 +235,7 @@ const TestSimulation = () => {
 
     }, [moduleToBeShown])
 
-    const renderQuestionGenerator = () => {
+    const renderQuestionGenerator = useCallback(() => {
         const currentModuleState = moduleQuestionStates[moduleToBeShown];
         sessionStorage.setItem('currentModule', `${moduleToBeShown}`);
 
@@ -246,7 +249,7 @@ const TestSimulation = () => {
                 onUserAnswersChange={(userAnswers) => updateModuleAnswers(moduleToBeShown, userAnswers)}
             />
         );
-    }
+    }, [moduleToBeShown, moduleQuestionStates, updateModuleQuestions, updateModuleAnswers]);
 
     const savedAnswers = sessionStorage.getItem(`answers-module-${modulosData[moduleToBeShown].module}`);
     const totalQuestionsInModule = modulosData[moduleToBeShown].quantity;
@@ -255,11 +258,13 @@ const TestSimulation = () => {
 
     return <>
         <CounterProvider>
-            <div className={styles["main-container-test-simulation"]} style={{ overflow: `${displayContenedorSimulacion}` }}>
+            {saving ? <LoadingScreen /> : null}
+            {showResultsTest ? <TestResults results={results} total={totalQuestions} /> : null}
 
-                {showConfirmMessage ? <FinishTestMessage cancelExitSimulation={handleConfirmMessage} continueExitSimulation={handleExitSimulation} stateShowConfirmMessage={showConfirmMessage} /> : null}
+            {showTestSimulation ? <div className={styles["main-container-test-simulation"]} style={{ overflow: `${displayContenedorSimulacion}` }}>
+
+                {showConfirmMessage ? <FinishTestMessage cancelExitSimulation={handleConfirmMessage} continueExitSimulation={handleExitSimulation} /> : null}
                 {showCheckTestMessage ? <CheckTestSimulation cancelShowCheckTestMessage={handleShowCheckTestMessage} showResults={showResults} /> : null}
-                {showResultsTest ? <TestResults results={results} total={totalQuestions} /> : null}
 
                 <div className={styles["container-header-element"]}>
                     <div className={styles["header-styler-container"]}>
@@ -282,7 +287,9 @@ const TestSimulation = () => {
                 <div className={styles["control-simulation-buttons-container"]}>
                     <ControlSimulationButtons nextModule={handleNextModule} showCheckTest={handleShowCheckTestMessage} buttonState={buttonState} />
                 </div>
-            </div>
+            </div> : null}
+
+
         </CounterProvider>
     </>
 };

@@ -10,4 +10,4 @@ const ProgressBar = ({progress}: {progress: string}) => {
     </>
 };
 
-export default ProgressBar;
+export default React.memo(ProgressBar);
