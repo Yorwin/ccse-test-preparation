@@ -22,3 +22,8 @@
     right: 10px;
     top: 10px;
 }
+
+.graphics-main-container {
+    position: absolute;
+    top: 125px;
+}

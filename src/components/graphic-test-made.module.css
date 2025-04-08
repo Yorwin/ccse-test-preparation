@@ -5,7 +5,7 @@
     flex-direction: column;
     padding: .7rem 2rem;
     border-radius: 1.2rem;
-    width: 260px;
+    width: 20vw;
     height: 200px;
     background-color: #A55A55;
     position: relative;
@@ -50,6 +50,7 @@
     border-radius: 50%;
     padding: 0.2rem 0.5rem;
     font-size: 1.6rem;
+    cursor: default;
 }
 
 .total-hours {
@@ -73,4 +74,65 @@
     left: 15px;
     font-size: 1.4rem;
     margin-bottom: 0rem;
+}
+
+.main-container-weeklygraphic {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: .7rem 2rem;
+    border-radius: 1.2rem;
+    width: 30vw;
+    height: 300px;
+    background-color: #A55A55;
+    position: relative;
+}
+
+.weekly-graph-title {
+    position: absolute;
+    left: 30px;
+    top: 60px;
+}
+
+.weekly-graph-title h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0rem;
+}
+
+.graph-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    position: relative;
+}
+
+.candle-graph {
+    width: 25px;
+    background-color: #322B2A;
+    border-radius: .5rem .5rem 0rem 0rem;
+}
+
+.graph-text-container {
+    padding-left: .8rem;
+    padding-right: .8rem;
+}
+
+.base-line-graph {
+    position: absolute;
+    width: 90%;
+    height: 4px;
+    background-color: #322B2A;
+    z-index: 1;
+    bottom: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.graph-text {
+    display: block;
+    margin-top: 0.5rem;
 }

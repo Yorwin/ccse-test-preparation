@@ -5,6 +5,8 @@ import TituloGenerico from "../components/titulo-generico";
 import ArrowGoBack from "../components/arrow-go-back";
 import GraphicTestsMade from "../components/graphic-tests-made";
 import GraphicHoursSimulated from "../components/graphic-hours-simulated";
+import GraphRightTestsPercentage from "../components/graph-percentage-right-answers";
+import GraphicWeekSummary from "../components/graphic-week-summary";
 
 const Results = () => {
     return <>
@@ -24,10 +26,26 @@ const Results = () => {
                 </div>
 
                 {/* Graphs */}
-
-                <GraphicHoursSimulated />
-                <GraphicTestsMade />
-
+                <div className={styles["graphics-main-container"]}>
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="col-md-2 col-sm-12 d-flex justify-content-center">
+                                <div>
+                                    <GraphRightTestsPercentage />
+                                </div>
+                            </div>
+                            <div className="col-md-3 col-sm-6">
+                                <GraphicHoursSimulated />
+                            </div>
+                            <div className="col-md-3 col-sm-6">
+                                <GraphicTestsMade />
+                            </div>
+                            <div className="col-md-4 col-sm-12">
+                                <GraphicWeekSummary />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </>
