@@ -29,18 +29,18 @@ const Results = () => {
                 <div className={styles["graphics-main-container"]}>
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-2 col-sm-12 d-flex justify-content-center">
+                            <div className="col-md-2 col-sm-12 d-flex justify-content-center mb-sm-3">
                                 <div>
                                     <GraphRightTestsPercentage />
                                 </div>
                             </div>
-                            <div className="col-md-3 col-sm-6">
+                            <div className="col-md-3 col-sm-6 mb-sm-5 d-flex justify-content-center">
                                 <GraphicHoursSimulated />
                             </div>
-                            <div className="col-md-3 col-sm-6">
+                            <div className="col-md-3 col-sm-6 mb-sm-5 d-flex justify-content-center">
                                 <GraphicTestsMade />
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            <div className="col-md-4 col-sm-12 mb-sm-5 d-flex justify-content-center">
                                 <GraphicWeekSummary />
                             </div>
                         </div>

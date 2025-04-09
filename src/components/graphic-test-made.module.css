@@ -81,7 +81,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: .7rem 2rem;
     border-radius: 1.2rem;
     width: 30vw;
     height: 300px;
@@ -111,14 +110,16 @@
 }
 
 .candle-graph {
-    width: 25px;
+    width: 40px;
     background-color: #322B2A;
     border-radius: .5rem .5rem 0rem 0rem;
 }
 
 .graph-text-container {
-    padding-left: .8rem;
-    padding-right: .8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .base-line-graph {
@@ -135,4 +136,134 @@
 .graph-text {
     display: block;
     margin-top: 0.5rem;
+}
+
+@media screen and (min-width:1450px) {
+    .main-container-tests {
+        padding: .7rem 5rem;
+    }
+    .candle-graph {
+        width: 3vw;
+    }
+}
+
+@media screen and (max-width:1100px) {
+    .candle-graph {
+        width: 30px;
+    }
+
+    .main-container-tests {
+        padding: .7rem 1.4rem;
+    }
+
+    .main-container-tests h2 {
+        font-size: 1rem
+    }
+
+    .main-container-tests small {
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .parragraph-simulated-hours {
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (max-width:850px) {
+    .candle-graph {
+        width: 25px;
+    }
+
+    .parragraph-simulated-hours {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+@media screen and (width: 768px) {
+    .candle-graph {
+        width: 20px;
+    }
+}
+
+@media screen and (max-width: 767.8px) {
+
+    /* Hours Simulated */
+
+    .main-container-tests {
+        width: 100%;
+        padding: .7rem 3rem;
+    }
+
+    .main-container-tests h2 {
+        font-size: 1.2rem
+    }
+
+    .main-container-tests small {
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .parragraph-simulated-hours {
+        font-size: 1.5rem;
+        font-weight: 400;
+    }
+
+    /* Week History */
+    .main-container-weeklygraphic {
+        width: 100%;
+    }
+
+    .candle-graph {
+        width: 70px;
+        background-color: #322B2A;
+        border-radius: .5rem .5rem 0rem 0rem;
+    }
+
+    .graph-container {
+        padding: 1rem 1rem .5rem 1rem;
+    }
+
+    .base-line-graph {
+        position: absolute;
+        width: 95%;
+        bottom: 37px;
+    }
+}
+
+@media screen and (max-width:630px) {
+    .candle-graph {
+        width: 55px;
+    }
+}
+
+@media screen and (max-width:575px) {
+
+    /* Hours Simulated */
+
+    .main-container-tests {
+        width: 90%;
+        margin-bottom: 2.5rem;
+        padding: .7rem 3.8rem;
+    }
+
+    .main-container-tests h2 {
+        font-size: 1.3rem
+    }
+    
+    .main-container-tests small {
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    /* Week History */
+    .main-container-weeklygraphic {
+        width: 90%;
+        margin-bottom: 6rem;
+    }
+
+    .candle-graph {
+        width: 30px;
+    }
 }

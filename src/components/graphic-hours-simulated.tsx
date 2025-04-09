@@ -10,7 +10,7 @@ const GraphicHoursSimulated = () => {
             <div className={styles["total-hours"]}>
                 <h3 className={styles["amount-hours"]}>3.5<small className={styles["text-hours"]}> horas </small></h3>
             </div>
-            <p className={styles["parragraph-simulated-hours"]}>Total de horas simuladas</p>
+            <p className={styles["parragraph-simulated-hours"]}>Total de horas <br /> simuladas</p>
         </div>
     </>
 };
