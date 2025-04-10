@@ -1,22 +1,22 @@
 import React, { useEffect, useRef } from "react";
 
-const GraphRightTestsPercentage = () => {
+const GraphRightTestsPercentage = ({ totalTests, correctTests }: { totalTests: number, correctTests: number }) => {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    
+
     const canvasWidth = 260;
     const canvasHeight = 200;
 
     //Datos de Pruebas
-    const totalTests = 50;
-    const passedTests = 45;
-    const passPercentage = passedTests / totalTests;
+    const total = totalTests;
+    const passedTests = correctTests;
+    const passPercentage = passedTests / total;
 
     useEffect(() => {
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext('2d');
 
-            if(ctx) {
+            if (ctx) {
 
                 const beginningY = 14;
                 const centerX = canvasWidth / 2;
@@ -25,7 +25,7 @@ const GraphRightTestsPercentage = () => {
 
                 const arcAngle = passPercentage * 2 * Math.PI;
 
-                const startAngle = -Math.PI/2;
+                const startAngle = -Math.PI / 2;
                 const endAngle = startAngle + arcAngle;
 
                 ctx.font = 'bold 24px Arial';
@@ -43,15 +43,16 @@ const GraphRightTestsPercentage = () => {
 
                 ctx.closePath();
 
-                ctx.font = 'bold 28px Arial';
-                ctx.fillStyle = '#322B2A';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(`${Math.round(passPercentage * 100)}%`, centerX, centerY);
-
+                if (totalTests && correctTests) {
+                    ctx.font = 'bold 28px Arial';
+                    ctx.fillStyle = '#322B2A';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(`${Math.round(passPercentage * 100)}%`, centerX, centerY);
+                }
             }
         }
-    });
+    }, [totalTests, correctTests]);
 
     return <>
         <canvas width={canvasWidth} height={canvasHeight} ref={canvasRef}>Tu navegador no acepta canvas</canvas>
