@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { getResult, SaveResults } from "../types";
+import { getFullDate } from "../functions/functions";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -47,7 +48,7 @@ export const saveResultsTest = async ({ testId, score, answers, duration }: Save
     const result = {
       userId: user.uid,
       testId,
-      Date: new Date(),
+      Date: getFullDate(),
       score,
       answers,
       duration,
