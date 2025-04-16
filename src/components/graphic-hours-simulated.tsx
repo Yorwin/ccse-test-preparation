@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { db } from "../config/firebase";
 import { auth } from "../config/firebase";
 import { getDocs, collection } from "firebase/firestore";
+import { secondstoDecimalHours } from "../functions/functions";
 
 const GraphicHoursSimulated = () => {
 
@@ -31,10 +32,6 @@ const GraphicHoursSimulated = () => {
         })
 
         return hoursSimulated;
-    }
-
-    function secondstoDecimalHours(seconds: number) {
-        return (seconds / 3600).toFixed(1); // redondea a 2 decimales
     }
 
     useEffect(() => {

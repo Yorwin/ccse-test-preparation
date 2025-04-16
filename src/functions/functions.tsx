@@ -32,3 +32,22 @@ export const getCurrentDay = () => {
 
     return day;
 }
+
+export const getWeekDay = (dayNumberParam : number) => {
+    
+    const daysOfTheWeek = [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miercoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+    ];
+
+    return daysOfTheWeek[dayNumberParam];
+};
+
+export function secondstoDecimalHours(seconds: number) {
+    return (seconds / 3600).toFixed(1); // redondea a 2 decimales
+}
