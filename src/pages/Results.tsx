@@ -8,6 +8,7 @@ import GraphicTestsMade from "../components/graphic-tests-made";
 import GraphicHoursSimulated from "../components/graphic-hours-simulated";
 import GraphRightTestsPercentage from "../components/graph-percentage-right-answers";
 import GraphicWeekSummary from "../components/graphic-week-summary";
+import HistoryOfSimulations from "../components/history-of-simulations";
 import { db } from "../config/firebase";
 import { auth } from "../config/firebase";
 import { getDocs, collection } from "firebase/firestore";
@@ -105,8 +106,19 @@ const Results = () => {
                                 <GraphicWeekSummary />
                             </div>
                         </div>
+
+                        {/* History of Simulations*/}
+
+                        <div className="row">
+                            <div>
+                                <HistoryOfSimulations />
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+
+
             </div>
         </div>
     </>
