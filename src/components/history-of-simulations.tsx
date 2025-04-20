@@ -2,6 +2,7 @@ import React, { ReactElement, ReactNode, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { auth } from "../config/firebase";
+import { getFullDate } from "../functions/functions";
 import styles from "./graphic-test-made.module.css"
 
 interface answersType {
@@ -34,6 +35,7 @@ const HistoryOfSimulations = () => {
     }
 
     const [testResults, setTestResults] = useState<ReactNode>([]);
+    const [displayLimit, setDisplayLimit] = useState(5);
 
     const getResults = async () => {
         const resultsRef = collection(db, "users", user.uid, "resultados");
@@ -81,16 +83,54 @@ const HistoryOfSimulations = () => {
             totalRightAnswers: getTotalRightAnswers(e.score),
             approved: calculateApproved(e.score),
             percentage: calculateRightAnswerPercentage(e.score),
+            secondsSinceMidNight: e.secondsSinceMidNight,
         }));
 
-        const showSimulations = processedArray.map((e, index) => {
+        const sortedArray = processedArray.sort((a, b) => {
+
+            const today = getFullDate();
+
+            // Verificar cual de los dos Items corresponde a TODAY. 
+            const aIsToday = a.date === today;
+            const bIsToday = b.date === today;
+
+            // Si uno corresponde a TODAY y el otro no TODAY va a ir primero. 
+            if (aIsToday && !bIsToday) return -1;
+            if (!aIsToday && bIsToday) return 1;
+
+            // Si ambos son de hoy, o ambos son de diferentes días organizaremos usando secondsSinceMidNight desde el más nuevo. 
+            if (aIsToday && bIsToday) {
+                return b.secondsSinceMidNight - a.secondsSinceMidNight;
+            } else {
+
+                // Para elementos de días diferentes, analiza y compara las fechas.
+                const [aDay, aMonth, aYear] = a.date.split('/').map(Number);
+                const [bDay, bMonth, bYear] = b.date.split('/').map(Number);
+
+                // Compara años. 
+                if (aYear !== bYear) return bYear - aYear;
+
+                // Compara meses. 
+                if (aMonth !== bMonth) return bMonth - aMonth;
+
+                // Compara días.
+                if (aDay !== bDay) return bDay - aDay;
+
+                // Si la fecha es la misma pero no es de hoy, organizar usando los segundos. 
+                return b.secondsSinceMidNight - a.secondsSinceMidNight;
+            }
+        });
+
+        const limitedArray = sortedArray.slice(0, displayLimit);
+
+        let showSimulations = limitedArray.map((e, index) => {
             return (
                 <div className={styles["simulation"]} key={`${index}-simulation`}>
-                    <small>{e.date}</small>
-                    <small>{e.totalRightAnswers}</small>
-                    <small>{e.approved}</small>
-                    <small>{`${e.percentage}%`}</small>
-                    <small><a href="#">Respuestas</a></small>
+                    <p>{e.date}</p>
+                    <p className={styles["optional-value"]}>{e.totalRightAnswers}</p>
+                    <p>{e.approved}</p>
+                    <p className={styles["optional-value"]}>{`${e.percentage}%`}</p>
+                    <p><a href="#">Respuestas</a></p>
                 </div>
             )
         })
@@ -98,9 +138,14 @@ const HistoryOfSimulations = () => {
         setTestResults(showSimulations);
     };
 
+    const increaseDisplayLimit = () => {
+        console.log(displayLimit);
+        setDisplayLimit(prevLimit => prevLimit + 5);
+    };
+
     useEffect(() => {
         processedResults();
-    }, []);
+    }, [displayLimit]);
 
     return <>
         <h2 className={styles["title"]}>Historial de Simulaciones</h2>
@@ -108,7 +153,7 @@ const HistoryOfSimulations = () => {
             {testResults}
             <small className={styles["notation"]}>Datos de una prueba aleatoria sin valor legal</small>
         </div>
-        <button className={styles["button-see-more"]}>Ver más...</button>
+        <button className={styles["button-see-more"]} onClick={increaseDisplayLimit}>Ver más...</button>
     </>
 };
 

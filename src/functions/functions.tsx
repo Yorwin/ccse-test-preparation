@@ -51,3 +51,15 @@ export const getWeekDay = (dayNumberParam : number) => {
 export function secondstoDecimalHours(seconds: number) {
     return (seconds / 3600).toFixed(1); // redondea a 2 decimales
 }
+
+export const getCurrentSecondsSinceMidNight = () => {
+
+    const currentDate = new Date();
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+
+    //Convert hours and minutes to seconds.
+    const totalSeconds = (hours * 3600) + (minutes * 60);
+
+    return totalSeconds;
+};

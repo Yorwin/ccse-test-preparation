@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { getResult, SaveResults } from "../types";
-import { getFullDate } from "../functions/functions";
+import { getFullDate, getCurrentSecondsSinceMidNight } from "../functions/functions";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -38,7 +38,7 @@ export const db = getFirestore();
 
 //Función para guardar resultados de Test.
 
-export const saveResultsTest = async ({ testId, score, answers, duration }: SaveResults) => {
+export const saveResultsTest = async ({ testId, score, answers, duration, questions }: SaveResults) => {
   try {
     const user = auth.currentUser;
     if (!user) {
@@ -49,9 +49,11 @@ export const saveResultsTest = async ({ testId, score, answers, duration }: Save
       userId: user.uid,
       testId,
       Date: getFullDate(),
+      secondsSinceMidNight: getCurrentSecondsSinceMidNight(), 
       score,
       answers,
       duration,
+      questions: JSON.stringify(questions),
     }
 
     //Guardar en FireStore

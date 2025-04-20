@@ -27,6 +27,7 @@ export interface SaveResults {
     score : number, 
     answers : verifiedAnswersBeforeResults[];
     duration : number,
+    questions : string[],
 }
 
 export interface getResult {

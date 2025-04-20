@@ -48,7 +48,13 @@ const GraphRightTestsPercentage = ({ totalTests, correctTests }: { totalTests: n
                     ctx.fillStyle = '#322B2A';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(`${passedTests != 0 ? Math.round(passPercentage * 100) : "0"}%`, centerX, centerY);
+                    ctx.fillText(`${passedTests != 0 ? Math.round(passPercentage * 100) : 0}%`, centerX, centerY);
+                } else {
+                    ctx.font = 'bold 28px Arial';
+                    ctx.fillStyle = '#322B2A';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(`${0}%`, centerX, centerY);
                 }
             }
         }

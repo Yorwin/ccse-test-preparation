@@ -110,7 +110,7 @@ const Results = () => {
                         {/* History of Simulations*/}
 
                         <div className="row">
-                            <div>
+                            <div className={styles["container-history-simulations"]}>
                                 <HistoryOfSimulations />
                             </div>
                         </div>

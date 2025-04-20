@@ -41,3 +41,13 @@
         top: 140px;
     }
 }
+
+.container-history-simulations {
+    margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+    .container-history-simulations {
+        padding: 0rem 1.5rem;
+    }
+}

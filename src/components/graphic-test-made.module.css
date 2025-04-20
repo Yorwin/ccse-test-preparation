@@ -292,11 +292,12 @@
     margin-bottom: 1.7rem;
 }
 
-.simulation small {
-    font-size: 1.3rem;
+.simulation p {
+    margin-bottom: 0rem;
+    font-size: 1.2rem;
 }
 
-.simulation small a {
+.simulation p a {
     color: #FA3B2D;
     font-weight: 600;
 }
@@ -316,4 +317,43 @@
     color: #FA3B2D;
     padding: 0rem;
 }
+
+@media screen and (max-width: 767.9px) {
+    .title {
+        font-size: 1.4rem;
+    }
+
+    .simulation {
+        width: 100%;
+    }
+
+    .simulation p {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .title {
+        font-size: 1.2rem;
+    }
+
+    .simulation p {
+        font-size: .9rem;
+    }
+
+    .notation {
+        font-size: .7rem;
+        bottom: -25px;
+    }
+    .button-see-more {
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        padding: 0rem;
+    }
+
+    .optional-value {
+        display: none;
+    }
+}
+
 
