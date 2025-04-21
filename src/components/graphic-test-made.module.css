@@ -318,6 +318,16 @@
     padding: 0rem;
 }
 
+.button-simulation-result {
+    background-color: transparent;
+    border: none;
+    color: #FA3B2D;
+}
+
+.button-simulation-result:hover {
+    text-decoration: .2rem underline #FA3B2D solid;
+}
+
 @media screen and (max-width: 767.9px) {
     .title {
         font-size: 1.4rem;

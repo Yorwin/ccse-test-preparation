@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { auth } from "../config/firebase";
@@ -26,7 +26,11 @@ interface processedResults {
     percentage: number,
 }
 
-const HistoryOfSimulations = () => {
+interface historyProps {
+    showSimulationResult: () => void;
+}
+
+const HistoryOfSimulations = ({ showSimulationResult }: historyProps) => {
 
     const user = auth.currentUser;
 
@@ -130,7 +134,7 @@ const HistoryOfSimulations = () => {
                     <p className={styles["optional-value"]}>{e.totalRightAnswers}</p>
                     <p>{e.approved}</p>
                     <p className={styles["optional-value"]}>{`${e.percentage}%`}</p>
-                    <p><a href="#">Respuestas</a></p>
+                    <p><button type="button" className={styles["button-simulation-result"]} onClick={showSimulationResult}>Respuestas</button></p>
                 </div>
             )
         })
@@ -139,7 +143,6 @@ const HistoryOfSimulations = () => {
     };
 
     const increaseDisplayLimit = () => {
-        console.log(displayLimit);
         setDisplayLimit(prevLimit => prevLimit + 5);
     };
 

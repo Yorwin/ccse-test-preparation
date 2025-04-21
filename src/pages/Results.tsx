@@ -9,6 +9,7 @@ import GraphicHoursSimulated from "../components/graphic-hours-simulated";
 import GraphRightTestsPercentage from "../components/graph-percentage-right-answers";
 import GraphicWeekSummary from "../components/graphic-week-summary";
 import HistoryOfSimulations from "../components/history-of-simulations";
+import SimulationResults from "../components/simulation-results";
 import { db } from "../config/firebase";
 import { auth } from "../config/firebase";
 import { getDocs, collection } from "firebase/firestore";
@@ -18,6 +19,8 @@ const Results = () => {
     const [totalTests, setTestsTotal] = useState(0);
     const [correctTests, setCorrectTests] = useState(0);
     const [incorrectTests, setIncorrectTests] = useState(0);
+
+    const [simulationResult, setSimulationResult] = useState(false);
 
     const user = auth.currentUser;
 
@@ -67,6 +70,10 @@ const Results = () => {
             });
     };
 
+    const toggleShowSimulationResult = () => {
+        setSimulationResult(e => !e);
+    }
+
     useEffect(() => {
         getTestsInfo()
     })
@@ -74,51 +81,50 @@ const Results = () => {
     return <>
         <div className={styles["main-container-results"]}>
             <div className={styles["content-container"]}>
+                {simulationResult ? <SimulationResults showSimulationResult={toggleShowSimulationResult} /> : (
+                    <>
+                        {/* Header */}
+                        <div className={styles["title-container"]}>
+                            <TituloGenerico titulo="Resultados exámenes" />
+                        </div>
 
-                {/* Header */}
+                        <div className={styles["container-arrow-go-back"]}>
+                            <Link to={"/"}>
+                                <ArrowGoBack />
+                            </Link>
+                        </div>
 
-                <div className={styles["title-container"]}>
-                    <TituloGenerico titulo="Resultados exámenes" />
-                </div>
+                        {/* Graphs */}
+                        <div className={styles["graphics-main-container"]}>
+                            <div className="container-fluid">
+                                <div className="row">
+                                    <div className="col-md-2 col-sm-12 d-flex justify-content-center mb-sm-3">
+                                        <div>
+                                            <GraphRightTestsPercentage totalTests={totalTests} correctTests={correctTests} />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3 col-sm-6 mb-sm-5 d-flex justify-content-center">
+                                        <GraphicHoursSimulated />
+                                    </div>
+                                    <div className="col-md-3 col-sm-6 mb-sm-5 d-flex justify-content-center">
+                                        <GraphicTestsMade correctTests={correctTests} incorrectTests={incorrectTests} totalTests={totalTests} />
+                                    </div>
+                                    <div className="col-md-4 col-sm-12 mb-sm-5 d-flex justify-content-center">
+                                        <GraphicWeekSummary />
+                                    </div>
+                                </div>
 
-                <div className={styles["container-arrow-go-back"]}>
-                    <Link to={"/"}>
-                        <ArrowGoBack />
-                    </Link>
-                </div>
+                                {/* History of Simulations*/}
 
-                {/* Graphs */}
-                <div className={styles["graphics-main-container"]}>
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-2 col-sm-12 d-flex justify-content-center mb-sm-3">
-                                <div>
-                                    <GraphRightTestsPercentage totalTests={totalTests} correctTests={correctTests} />
+                                <div className="row">
+                                    <div className={styles["container-history-simulations"]}>
+                                        <HistoryOfSimulations showSimulationResult={toggleShowSimulationResult} />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-md-3 col-sm-6 mb-sm-5 d-flex justify-content-center">
-                                <GraphicHoursSimulated />
-                            </div>
-                            <div className="col-md-3 col-sm-6 mb-sm-5 d-flex justify-content-center">
-                                <GraphicTestsMade correctTests={correctTests} incorrectTests={incorrectTests} totalTests={totalTests} />
-                            </div>
-                            <div className="col-md-4 col-sm-12 mb-sm-5 d-flex justify-content-center">
-                                <GraphicWeekSummary />
-                            </div>
                         </div>
-
-                        {/* History of Simulations*/}
-
-                        <div className="row">
-                            <div className={styles["container-history-simulations"]}>
-                                <HistoryOfSimulations />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
+                    </>
+                )}
             </div>
         </div>
     </>
