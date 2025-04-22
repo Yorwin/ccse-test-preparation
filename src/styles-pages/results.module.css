@@ -50,14 +50,18 @@
 }
 
 .simulation-results-container {
+    width: 100%;
+}
+
+.header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: absolute;
-    z-index: 2;
     background-color: #fff;
     width: 100%;
     height: 5%;
+    z-index: 2;
 }
 
 .check-answers-container {
@@ -87,3 +91,134 @@
         padding: 0rem 1.5rem;
     }
 }
+
+/* Questions */
+
+.question-list {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 140px;
+}
+
+.question-list li {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    list-style-type: none;
+    flex-direction: column;
+    margin-bottom: 2.5rem;
+}
+
+.question-number {
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+
+.question-parragraph {
+    margin-bottom: 1.4rem;
+}
+
+.question-list small {
+    margin-right: .7rem;
+    margin-bottom: 0rem;
+}
+
+.question-list i {
+    padding-left: 0rem;
+    cursor: default;
+}
+
+.question-option-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+}
+
+.question-option-wrong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+}
+
+.question-option-right i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    width: 35px;
+    border: 0.2rem #37AC20 solid;
+    border-radius: 2rem;
+    color: #37AC20;
+    font-size: 1.7rem;
+}
+
+.question-option-wrong i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    width: 35px;
+    border: 0.2rem #FA3B2D solid;
+    border-radius: 2rem;
+    color: #FA3B2D;
+    font-size: 1.7rem;
+}
+
+.question-option p {
+    margin-bottom: 0rem;
+}
+
+.text-option {
+    margin-bottom: 0rem;
+}
+
+/* Control Bar */
+
+.questions-control-bar div {
+    margin-bottom: 1rem;
+}
+
+.questions-control-bar {
+    position: fixed;
+    top: 50%;
+    right: 40px;
+    transform: translateY(-50%);
+}
+
+.right-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0.15rem #37AC20 solid;
+    border-radius: 3rem;
+}
+
+.right-item i {
+    padding-left: 0rem;
+    font-size: 2rem;
+    color: #37AC20;
+}
+
+.wrong-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0.15rem #FA3B2D solid;
+    border-radius: 3rem;
+}
+
+.wrong-item i {
+    padding-left: 0rem;
+    font-size: 2rem;
+    color: #FA3B2D;
+}
+
