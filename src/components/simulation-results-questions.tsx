@@ -1,189 +1,56 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../styles-pages/results.module.css"
 
-const SimulationResultQuestions = () => {
+interface Questions {
+    id?: string,
+    pregunta?: string,
+    respuestas?: string[],
+    correcta?: number,
+}
+
+interface ModulesMap {
+    [key: string]: Questions[]; // Cada módulo contiene un array de preguntas
+}
+
+interface SimulationResultQuestionsProps {
+    questionData: ModulesMap;
+}
+
+const SimulationResultQuestions = ({ questionData }: SimulationResultQuestionsProps) => {
+
+    const getQuestionData = () => {
+        console.log(questionData);
+    }
+
+    useEffect(() => {
+        getQuestionData();
+    }, []);
+
     return (
         <ul className={styles["question-list"]}>
 
-            {/* Pregunta */}
+            {questionData.module1.map((e, index) => {
 
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>1</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
+                const respuestas = e.respuestas || [];
 
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>2</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>3</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>4</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>5</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>6</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>7</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>8</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>9</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
-
-            {/* Pregunta */}
-
-            <li>
-                <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>10</small> El aranés es una lengua co-oficial que se habla en un pequeño territorio de...</p>
-                <div className={styles["question-option-right"]}>
-                    <i className="bi bi-check-lg"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-                <div className={styles["question-option-wrong"]}>
-                    <i className="bi bi-x"></i>
-                    <p className={styles["text-option"]}>Cataluña</p>
-                </div>
-            </li>
+                return (
+                    <li key={index}>
+                        <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>{index + 1}</small>{e.pregunta}</p>
+                        <div className={styles["question-option-right"]}>
+                            <i className="bi bi-check-lg"></i>
+                            <p className={styles["text-option"]}>{respuestas[0] || 'Sin respuesta'}</p>
+                        </div>
+                        <div className={styles["question-option-wrong"]}>
+                            <i className="bi bi-x"></i>
+                            <p className={styles["text-option"]}>{respuestas[1] || 'Sin respuesta'}</p>
+                        </div>
+                        <div className={styles["question-option-wrong"]}>
+                            <i className="bi bi-x"></i>
+                            <p className={styles["text-option"]}>{respuestas[2] || 'Sin respuesta'}</p>
+                        </div>
+                    </li>
+                );
+            })}
         </ul>
     )
 };

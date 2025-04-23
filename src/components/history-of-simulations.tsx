@@ -27,7 +27,7 @@ interface processedResults {
 }
 
 interface historyProps {
-    showSimulationResult: () => void;
+    showSimulationResult: (e: any) => void;
 }
 
 const HistoryOfSimulations = ({ showSimulationResult }: historyProps) => {
@@ -39,6 +39,7 @@ const HistoryOfSimulations = ({ showSimulationResult }: historyProps) => {
     }
 
     const [testResults, setTestResults] = useState<ReactNode>([]);
+    const [idResult, setIdResult] = useState<string>("");
     const [displayLimit, setDisplayLimit] = useState(5);
 
     const getResults = async () => {
@@ -83,6 +84,7 @@ const HistoryOfSimulations = ({ showSimulationResult }: historyProps) => {
         const getResultsUser = await getResults();
 
         const processedArray = getResultsUser.map((e: any) => ({
+            id: e.id,
             date: e.Date,
             totalRightAnswers: getTotalRightAnswers(e.score),
             approved: calculateApproved(e.score),
@@ -134,10 +136,16 @@ const HistoryOfSimulations = ({ showSimulationResult }: historyProps) => {
                     <p className={styles["optional-value"]}>{e.totalRightAnswers}</p>
                     <p>{e.approved}</p>
                     <p className={styles["optional-value"]}>{`${e.percentage}%`}</p>
-                    <p><button type="button" className={styles["button-simulation-result"]} onClick={showSimulationResult}>Respuestas</button></p>
+                    <p><button type="button" className={styles["button-simulation-result"]} onClick={() => {
+                        const result = showSimulationResult(e.id);
+                        setIdResult(`${result}`);
+                    }}>
+                        Respuestas
+                    </button></p>
                 </div>
             )
         })
+
 
         setTestResults(showSimulations);
     };

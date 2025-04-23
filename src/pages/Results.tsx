@@ -21,6 +21,7 @@ const Results = () => {
     const [incorrectTests, setIncorrectTests] = useState(0);
 
     const [simulationResult, setSimulationResult] = useState(false);
+    const [idResult, setIdResult] = useState("");
 
     const user = auth.currentUser;
 
@@ -70,8 +71,18 @@ const Results = () => {
             });
     };
 
-    const toggleShowSimulationResult = () => {
+    const toggleShowSimulationResult = (element: any) => {
+
         setSimulationResult(e => !e);
+
+        let questionId;
+
+        if (!simulationResult) {
+            questionId = element;
+            setIdResult(questionId);
+        }
+
+        return questionId;
     }
 
     useEffect(() => {
@@ -81,7 +92,7 @@ const Results = () => {
     return <>
         <div className={styles["main-container-results"]}>
             <div className={styles["content-container"]}>
-                {simulationResult ? <SimulationResults showSimulationResult={toggleShowSimulationResult} /> : (
+                {simulationResult ? <SimulationResults showSimulationResult={toggleShowSimulationResult} questionId={idResult} /> : (
                     <>
                         {/* Header */}
                         <div className={styles["title-container"]}>
