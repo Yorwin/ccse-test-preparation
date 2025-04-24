@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles-pages/results.module.css"
 
 interface Questions {
@@ -14,43 +14,56 @@ interface ModulesMap {
 
 interface SimulationResultQuestionsProps {
     questionData: ModulesMap;
+    currentModule: number;
 }
 
-const SimulationResultQuestions = ({ questionData }: SimulationResultQuestionsProps) => {
+const SimulationResultQuestions = ({ questionData, currentModule }: SimulationResultQuestionsProps) => {
 
-    const getQuestionData = () => {
-        console.log(questionData);
-    }
+    const [moduleToBeShown, setModuleToBeShow] = useState<React.ReactElement>(<></>);
+
+    const renderQuestionList = (moduleQuestions: any) => {
+        return moduleQuestions.map((e: any, index: number) => {
+            const respuestas = e.respuestas || [];
+
+            return (
+                <li key={index}>
+                    <p className={styles["question-parragraph"]}>
+                        <small className={styles["question-number"]}>{index + 1}</small>{e.pregunta}
+                    </p>
+                    <div className={styles["question-option-right"]}>
+                        <i className="bi bi-check-lg"></i>
+                        <p className={styles["text-option"]}>{respuestas[0] || 'Sin respuesta'}</p>
+                    </div>
+                    <div className={styles["question-option-wrong"]}>
+                        <i className="bi bi-x"></i>
+                        <p className={styles["text-option"]}>{respuestas[1] || 'Sin respuesta'}</p>
+                    </div>
+                    <div className={styles["question-option-wrong"]}>
+                        <i className="bi bi-x"></i>
+                        <p className={styles["text-option"]}>{respuestas[2] || 'Sin respuesta'}</p>
+                    </div>
+                </li>
+            );
+        });
+    };
+
+    const modulesList = [
+        renderQuestionList(questionData.module1),
+        renderQuestionList(questionData.module2),
+        renderQuestionList(questionData.module3),
+        renderQuestionList(questionData.module4),
+        renderQuestionList(questionData.module5)
+    ];
 
     useEffect(() => {
-        getQuestionData();
-    }, []);
+        if (currentModule >= 0) {
+            setModuleToBeShow(modulesList[currentModule]);
+        }
+    }, [currentModule]);
 
     return (
         <ul className={styles["question-list"]}>
-
-            {questionData.module1.map((e, index) => {
-
-                const respuestas = e.respuestas || [];
-
-                return (
-                    <li key={index}>
-                        <p className={styles["question-parragraph"]}> <small className={styles["question-number"]}>{index + 1}</small>{e.pregunta}</p>
-                        <div className={styles["question-option-right"]}>
-                            <i className="bi bi-check-lg"></i>
-                            <p className={styles["text-option"]}>{respuestas[0] || 'Sin respuesta'}</p>
-                        </div>
-                        <div className={styles["question-option-wrong"]}>
-                            <i className="bi bi-x"></i>
-                            <p className={styles["text-option"]}>{respuestas[1] || 'Sin respuesta'}</p>
-                        </div>
-                        <div className={styles["question-option-wrong"]}>
-                            <i className="bi bi-x"></i>
-                            <p className={styles["text-option"]}>{respuestas[2] || 'Sin respuesta'}</p>
-                        </div>
-                    </li>
-                );
-            })}
+            {moduleToBeShown}
         </ul>
     )
 };

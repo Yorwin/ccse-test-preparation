@@ -1,20 +1,32 @@
 import React from "react";
 import styles from "../components/progress-next-back-results.module.css"
 
-const ProgressNextBack = () => {
+interface directionArrowsAndModule {
+    goBack: () => void,
+    goForward: () => void,
+    module: number,
+}
+
+const ProgressNextBack = ({ goBack, goForward, module }: directionArrowsAndModule) => {
     return <>
         <div className={styles["arrow-back"]}>
-            <i className="bi bi-caret-left"></i>
+            <button type="button" className={styles["arrow-results"]} onClick={goBack}>
+                <i className="bi bi-caret-left"></i>
+            </button>
         </div>
         <div className={styles["progress-container"]}>
-            <div className={styles["progress-circle"]}></div>
-            <div className={styles["progress-circle"]}></div>
-            <div className={styles["progress-circle"]}></div>
-            <div className={styles["progress-circle"]}></div>
-            <div className={styles["progress-circle"]}></div>
+            {[0, 1, 2, 3, 4].map((index) => (
+                <div
+                    key={index}
+                    className={styles["progress-circle"]}
+                    style={{ backgroundColor: index <= module ? 'red' : '' }}
+                ></div>
+            ))}
         </div>
         <div className={styles["arrow-next"]}>
-            <i className="bi bi-caret-right"></i>
+            <button type="button" className={styles["arrow-results"]} onClick={goForward}>
+                <i className="bi bi-caret-right"></i>
+            </button>
         </div>
     </>
 };

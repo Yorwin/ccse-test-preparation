@@ -31,7 +31,11 @@ const SimulationResults = ({ showSimulationResult, questionId }: historyProps) =
     }
 
     const [preguntasPorModulo, setPreguntasPorModulo] = useState<ModulesMap>({});
+    const [answersForModule, setAnswersForModule] = useState<any>([]);
+
     const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    const [currentModule, setCurrentModule] = useState<number>(0);
 
     useEffect(() => {
 
@@ -65,9 +69,49 @@ const SimulationResults = ({ showSimulationResult, questionId }: historyProps) =
             }
         };
 
+        const getAnswers = async () => {
+            try {
+                setIsLoading(true);
+                const questionRef = doc(db, "users", user.uid, "resultados", questionId);
+                const docSnapshot = await getDoc(questionRef);
+                const data = docSnapshot.data();
+
+                if (data) {
+                    const answers = data.answers;
+                    console.log(answers);
+                    setAnswersForModule(answers);
+                }
+            } catch (error) {
+                console.error("Error al cargar las preguntas:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
         // Ejecutar la función
         getQuestions();
+        getAnswers();
     }, [questionId, user.uid]); // Solo dependencias necesarias
+
+    const goBack = () => {
+        setCurrentModule((e: number) => {
+            if (e === 0) {
+                return 0
+            } else {
+                return e - 1;
+            }
+        });
+    }
+
+    const goForward = () => {
+        setCurrentModule((e: number) => {
+            if (e === 4) {
+                return 4
+            } else {
+                return e + 1;
+            }
+        });
+    }
 
     return <>
         <div className={styles["simulation-results-container"]}>
@@ -79,15 +123,15 @@ const SimulationResults = ({ showSimulationResult, questionId }: historyProps) =
                 </div>
                 <div className={styles["check-answers-container"]}>
                     <h1 className={styles["title-check-answers"]}>Revisar respuestas</h1>
-                    <ProgressNextBack />
+                    <ProgressNextBack goBack={goBack} goForward={goForward} module={currentModule} />
                 </div>
-                <TaskControl taskCounter={0} />
+                <TaskControl taskCounter={currentModule} />
             </div>
             <div className={styles["question-container"]}>
                 {isLoading ? (
                     <p>Cargando preguntas...</p>
                 ) : (
-                    <SimulationResultQuestions questionData={preguntasPorModulo} />
+                    <SimulationResultQuestions questionData={preguntasPorModulo} currentModule={currentModule} />
                 )}
             </div>
             <ControlBar />

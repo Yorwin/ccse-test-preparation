@@ -38,3 +38,13 @@
     border-radius: 1rem;
     background-color: #fff;
 }
+
+.progress-circle .active {
+    background-color: #FA3B2D;
+}
+
+.arrow-results {
+    background-color: transparent;
+    border: none;
+    padding: 0rem;
+}

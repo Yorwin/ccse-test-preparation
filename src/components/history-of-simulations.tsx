@@ -24,6 +24,7 @@ interface processedResults {
     totalRightAnswers: string,
     approved: string,
     percentage: number,
+    answers: answersType
 }
 
 interface historyProps {
