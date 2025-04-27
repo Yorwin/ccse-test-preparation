@@ -30,8 +30,8 @@ const SimulationResults = ({ showSimulationResult, questionId }: historyProps) =
         throw new Error("Usuario no autenticado");
     }
 
-    const [preguntasPorModulo, setPreguntasPorModulo] = useState<ModulesMap>({});
-    const [answersForModule, setAnswersForModule] = useState<any>([]);
+    const [questionEachModule, setQuestionEachModule] = useState<ModulesMap>({});
+    const [answersEachModule, setAnswersEachModule] = useState<any>([]);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -57,10 +57,10 @@ const SimulationResults = ({ showSimulationResult, questionId }: historyProps) =
                     });
 
                     // Actualizar el estado con los datos procesados
-                    setPreguntasPorModulo(modulesMap);
+                    setQuestionEachModule(modulesMap);
                 } else {
                     console.warn("No se encontraron preguntas para este ID");
-                    setPreguntasPorModulo({});
+                    setQuestionEachModule({});
                 }
             } catch (error) {
                 console.error("Error al cargar las preguntas:", error);
@@ -78,8 +78,7 @@ const SimulationResults = ({ showSimulationResult, questionId }: historyProps) =
 
                 if (data) {
                     const answers = data.answers;
-                    console.log(answers);
-                    setAnswersForModule(answers);
+                    setAnswersEachModule(answers);
                 }
             } catch (error) {
                 console.error("Error al cargar las preguntas:", error);
@@ -114,28 +113,32 @@ const SimulationResults = ({ showSimulationResult, questionId }: historyProps) =
     }
 
     return <>
-        <div className={styles["simulation-results-container"]}>
-            <div className={styles["header-container"]}>
-                <div>
-                    <button onClick={showSimulationResult} className={styles["exit-test-icon"]}>
-                        <i className="bi bi-x-circle-fill"></i>
-                    </button>
+            <div className={styles["simulation-results-container"]}>
+                <div className={styles["header-container"]}>
+                    <div>
+                        <button onClick={showSimulationResult} className={styles["exit-test-icon"]}>
+                            <i className="bi bi-x-circle-fill"></i>
+                        </button>
+                    </div>
+                    <div className={styles["check-answers-container"]}>
+                        <h1 className={styles["title-check-answers"]}>Revisar respuestas</h1>
+                        <ProgressNextBack goBack={goBack} goForward={goForward} module={currentModule} />
+                    </div>
+                    <TaskControl taskCounter={currentModule} />
                 </div>
-                <div className={styles["check-answers-container"]}>
-                    <h1 className={styles["title-check-answers"]}>Revisar respuestas</h1>
-                    <ProgressNextBack goBack={goBack} goForward={goForward} module={currentModule} />
+                <div className={styles["question-container"]}>
+                    {isLoading ? (
+                        <p>Cargando preguntas...</p>
+                    ) : (
+                        <SimulationResultQuestions questionData={questionEachModule} currentModule={currentModule} answers={answersEachModule} />
+                    )}
                 </div>
-                <TaskControl taskCounter={currentModule} />
-            </div>
-            <div className={styles["question-container"]}>
                 {isLoading ? (
-                    <p>Cargando preguntas...</p>
-                ) : (
-                    <SimulationResultQuestions questionData={preguntasPorModulo} currentModule={currentModule} />
-                )}
+                        <p>Cargando preguntas...</p>
+                    ) : (
+                        <ControlBar currentModule={currentModule} answers={answersEachModule} questionData={questionEachModule} />
+                    )}
             </div>
-            <ControlBar />
-        </div>
     </>
 };
 

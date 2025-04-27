@@ -12,36 +12,111 @@ interface ModulesMap {
     [key: string]: Questions[]; // Cada módulo contiene un array de preguntas
 }
 
+interface answers {
+    [key: string]: number;
+}
+
 interface SimulationResultQuestionsProps {
     questionData: ModulesMap;
     currentModule: number;
+    answers: answers[];
 }
 
-const SimulationResultQuestions = ({ questionData, currentModule }: SimulationResultQuestionsProps) => {
+const SimulationResultQuestions = ({ questionData, currentModule, answers }: SimulationResultQuestionsProps) => {
 
-    const [moduleToBeShown, setModuleToBeShow] = useState<React.ReactElement>(<></>);
+    const [moduleToBeShown, setModuleToBeShown] = useState<React.ReactElement>(<></>);
 
-    const renderQuestionList = (moduleQuestions: any) => {
-        return moduleQuestions.map((e: any, index: number) => {
-            const respuestas = e.respuestas || [];
+    const renderQuestionList = (moduleQuestions: Questions[]) => {
+
+        //Recibimos las respuestas y las sacamos del array para manejarlas más facilmente. 
+        const answeredQuestions = answers[0] || {};
+
+        //Devolvemos un nuevo array con los elementos JSX aplicando la lógica correspondiente.
+        return moduleQuestions.map((question: Questions, index: number) => {
+
+            if (!question.id) {
+                throw new Error("Error al intentar obtener la pregunta");
+            }
+
+            //Obtenemos el array con las respuestas y el identificador de la pregunta.
+            const respuestas = question.respuestas || [];
+            const questionId = question.id;
+
+            // Verificar si la pregunta fue respondida
+            let respondida: boolean = false;
+            let userAnswer: number | null = null;
+
+            if (questionId in answeredQuestions) {
+                respondida = true;
+                userAnswer = answeredQuestions[questionId];
+            }
+
+            // Determinar el estado de la pregunta
+            const isCorrect = respondida && (question.correcta === userAnswer);
+            const isIncorrect = respondida && !isCorrect;
+            const notAnswered = !respondida;
 
             return (
-                <li key={index}>
+                /* creamos un li element */
+                <li key={index} className={notAnswered ? styles["not-answered"] : ""}>
                     <p className={styles["question-parragraph"]}>
-                        <small className={styles["question-number"]}>{index + 1}</small>{e.pregunta}
+                        <small className={styles["question-number"]}>{index + 1}</small>
+                        {question.pregunta}
+                        {notAnswered && <span className={styles["not-answered-label"]}> (No respondida)</span>}
+                        {isCorrect && <span className={styles["correct-label"]}> (Correcta)</span>}
+                        {isIncorrect && <span className={styles["incorrect-label"]}> (Incorrecta)</span>}
                     </p>
-                    <div className={styles["question-option-right"]}>
-                        <i className="bi bi-check-lg"></i>
-                        <p className={styles["text-option"]}>{respuestas[0] || 'Sin respuesta'}</p>
-                    </div>
-                    <div className={styles["question-option-wrong"]}>
-                        <i className="bi bi-x"></i>
-                        <p className={styles["text-option"]}>{respuestas[1] || 'Sin respuesta'}</p>
-                    </div>
-                    <div className={styles["question-option-wrong"]}>
-                        <i className="bi bi-x"></i>
-                        <p className={styles["text-option"]}>{respuestas[2] || 'Sin respuesta'}</p>
-                    </div>
+
+                    {/* Renderizar cada opción de respuesta */}
+                    {respuestas.map((respuesta: string, respIndex: number) => {
+
+                        // Determinar el estilo de cada opción
+                        let optionClassName = styles["question-option"];
+                        let iconClassName = "";
+
+                        if (respondida) {
+                            const isCorrectOption = respIndex === question.correcta;
+                            const isSelectedOption = respIndex === userAnswer;
+
+                            if (isCorrectOption && isSelectedOption) {
+                                // Es la opción correcta Y fue seleccionada por el usuario
+                                optionClassName = `${optionClassName} ${styles["question-option-right"]}`;
+                                iconClassName = "bi bi-check-lg";
+                            } else if (isCorrectOption) {
+                                // Es la opción correcta pero NO fue seleccionada
+                                optionClassName = `${optionClassName} ${styles["question-option-right"]}`;
+                                iconClassName = "bi bi-check-lg";
+                            } else if (isSelectedOption) {
+                                // No es la correcta pero fue seleccionada (respuesta incorrecta)
+                                optionClassName = `${optionClassName} ${styles["question-option-wrong"]}`;
+                                iconClassName = "bi bi-x";
+                            } else {
+                                // No es correcta ni fue seleccionada
+                                optionClassName = `${optionClassName} ${styles["question-option-not-selected"]}`;
+                                iconClassName = styles["not-selected-option"];
+                            }
+                        }
+
+                        else {
+                            // Si no está respondida, marcamos la opción correcta con un estilo especial
+                            const isCorrectOption = respIndex === question.correcta;
+
+                            if (isCorrectOption) {
+                                optionClassName = `${optionClassName} ${styles["question-option-right-not-selected"]}`;
+                                iconClassName = "bi bi-check-lg";
+                            } else {
+                                optionClassName = `${optionClassName} ${styles["question-option-not-selected"]}`;
+                                iconClassName = styles["not-selected-option"];
+                            }
+                        }
+
+                        return (
+                            <div key={respIndex} className={optionClassName}>
+                                <i className={iconClassName}></i>
+                                <p className={styles["text-option"]}>{respuesta || 'Sin respuesta'}</p>
+                            </div>
+                        );
+                    })}
                 </li>
             );
         });
@@ -57,7 +132,7 @@ const SimulationResultQuestions = ({ questionData, currentModule }: SimulationRe
 
     useEffect(() => {
         if (currentModule >= 0) {
-            setModuleToBeShow(modulesList[currentModule]);
+            setModuleToBeShown(<>{modulesList[currentModule]}</>);
         }
     }, [currentModule]);
 
