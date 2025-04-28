@@ -217,6 +217,27 @@
     border-radius: 3rem;
 }
 
+.question-option-right-but-not-selected {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+    opacity: .6;
+}
+
+.question-option-right-but-not-selected i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    width: 35px;
+    border: 0.2rem #37AC20 solid;
+    border-radius: 2rem;
+    color: #37AC20;
+    font-size: 1.7rem;
+}
+
 .correct-label {
     font-weight: 700;
 }
@@ -272,4 +293,15 @@
     padding-left: 0rem;
     font-size: 2rem;
     color: #FA3B2D;
+}
+
+@media screen and (min-height: 1650px) {
+    .title-container h1 {
+        font-size: 4vh;
+    }
+
+    .graphics-main-container {
+        position: absolute;
+        top: 10vh;
+    }
 }

@@ -37,8 +37,12 @@ const GraphicHoursSimulated = () => {
     useEffect(() => {
         getHoursData()
             .then((e) => {
-                const totalHours = e.reduce((acc, currentValue) => acc + currentValue);
-                return totalHours
+                if (e.length > 0) {
+                    const totalHours = e.reduce((acc, currentValue) => acc + currentValue);
+                    return totalHours
+                } else {
+                    return 0;
+                }
             }).then((totalHours) => {
                 const total = secondstoDecimalHours(totalHours);
                 setSimulatedHours(total);

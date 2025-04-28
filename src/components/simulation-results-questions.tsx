@@ -84,7 +84,7 @@ const SimulationResultQuestions = ({ questionData, currentModule, answers }: Sim
                                 iconClassName = "bi bi-check-lg";
                             } else if (isCorrectOption) {
                                 // Es la opción correcta pero NO fue seleccionada
-                                optionClassName = `${optionClassName} ${styles["question-option-right"]}`;
+                                optionClassName = `${optionClassName} ${styles["question-option-right-but-not-selected"]}`;
                                 iconClassName = "bi bi-check-lg";
                             } else if (isSelectedOption) {
                                 // No es la correcta pero fue seleccionada (respuesta incorrecta)

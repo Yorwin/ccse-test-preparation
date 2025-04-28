@@ -187,7 +187,6 @@ const GraphicWeekSummary = () => {
                     weekDay: resultWeekDay,
                     ...doc.data()
                 }
-
             });
 
             return data;

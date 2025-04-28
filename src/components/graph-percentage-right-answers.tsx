@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import styles from "./graphic-test-made.module.css"
 
 const GraphRightTestsPercentage = ({ totalTests, correctTests }: { totalTests: number, correctTests: number }) => {
 
@@ -61,7 +62,7 @@ const GraphRightTestsPercentage = ({ totalTests, correctTests }: { totalTests: n
     }, [totalTests, correctTests]);
 
     return <>
-        <canvas width={canvasWidth} height={canvasHeight} ref={canvasRef}>Tu navegador no acepta canvas</canvas>
+        <canvas width={canvasWidth} height={canvasHeight} className={styles["canva-styles"]} ref={canvasRef}>Tu navegador no acepta canvas</canvas>
     </>
 };
 

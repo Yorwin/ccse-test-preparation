@@ -142,6 +142,7 @@
     .main-container-tests {
         padding: .7rem 5rem;
     }
+
     .candle-graph {
         width: 3vw;
     }
@@ -251,7 +252,7 @@
     .main-container-tests h2 {
         font-size: 1.3rem
     }
-    
+
     .main-container-tests small {
         font-size: 1.4rem;
         font-weight: 600;
@@ -328,6 +329,21 @@
     text-decoration: .2rem underline #FA3B2D solid;
 }
 
+.container-no-data {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.container-no-data p {
+    width: 35%;
+}
+
+.img-no-data {
+    width: 135px;
+    height: 135px;
+}
+
 @media screen and (max-width: 767.9px) {
     .title {
         font-size: 1.4rem;
@@ -355,6 +371,7 @@
         font-size: .7rem;
         bottom: -25px;
     }
+
     .button-see-more {
         margin-top: 0.5rem;
         font-size: 1rem;
@@ -366,4 +383,55 @@
     }
 }
 
+@media screen and (min-height: 1650px) {
+    .main-container-tests h2 {
+        font-size: 2vh
+    }
 
+    .main-container-tests {
+        height: 20vh;
+    }
+
+    .main-container-weeklygraphic {
+        height: 25vh;
+    }
+
+    .data-container small {
+        font-size: 2vh;
+    }
+
+    .shared-data-container div small {
+        font-size: 2vh;
+    }
+
+    /* Amount of Hours */
+
+    .amount-hours {
+        font-size: 5vh;
+    }
+
+    .amount-hours small {
+        font-size: 2vh;
+    }
+
+    .parragraph-simulated-hours {
+        font-size: 2.3vh;
+        line-height: 2.5vh;
+    }
+
+    /* Icon Styles */
+
+    .container-icon {
+        left: 1vh;
+        top: 1vh;
+        width: 5vh;
+        height: 5vh;
+    }
+    
+    .container-icon i {
+        background-color: #FA3B2D;
+        border-radius: 50%;
+        padding: 0.2rem 0.5rem;
+        font-size: 3.5vh;
+    }
+}
