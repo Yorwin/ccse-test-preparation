@@ -6,7 +6,7 @@ import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import TestSimulation from './pages/TestSimulation';
 import Settings from './pages/Settings';
-import ModulePractice from './pages/ModulePractice';
+import ModulePractice from './pages/modulepractice/ModulePractice';
 import Results from './pages/Results';
 import Recommendations from './pages/Recommendations';
 import Root from './pages/Root';
