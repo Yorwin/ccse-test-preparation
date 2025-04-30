@@ -4,11 +4,9 @@ import QuestionsCounter from "./questions-counter";
 import { toggleFunctionProp } from "../types/index"
 import styles from "../../../styles-pages/module-practice.module.css"
 
-const HeaderTest = ({toggleModulePractice} : toggleFunctionProp) => {
+const HeaderTest = ({ toggleModulePractice }: toggleFunctionProp) => {
     return <>
-        <div className={styles["exit-test-icon"]}>
-            <ExitTestIcon showConfirmMessage={toggleModulePractice}></ExitTestIcon>
-        </div>
+        <ExitTestIcon showConfirmMessage={toggleModulePractice}></ExitTestIcon>
         <div className={styles["title-test"]}>
             <h1>PRÁCTICA MODULO 1</h1>
         </div>
