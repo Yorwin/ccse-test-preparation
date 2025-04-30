@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "../../../styles-pages/module-practice.module.css"
+import { toggleFunctionProp } from "../types";
 
-const ModuleContent = () => {
+const ModuleContent = ({toggleModulePractice} : toggleFunctionProp) => {
 
     const arrayModulePractice = [{
         desc: "Gobierno, legislación y participación ciudadana.",
@@ -27,7 +28,7 @@ const ModuleContent = () => {
     const contentArray = arrayModulePractice.map((e, index) => {
         return (
             <div className={styles["module-clickable-content"]} key={index}>
-                <button className={styles["button-module"]}>
+                <button onClick={toggleModulePractice} className={styles["button-module"]}>
                     <div className={styles["module-practice"]}>
                         <div className={styles["icon-container"]}>
                             <i className={e.icon}></i>
