@@ -8,17 +8,23 @@ import styles from "../../styles-pages/module-practice.module.css"
 const ModulePractice = () => {
 
     const [startedModulePractice, setStartedModulePractice] = useState(false);
+    const [moduleNumber, setModuleNumber] = useState(1);
 
     const toggleStartedModulePractice = () => {
         setStartedModulePractice(e => !e);
     }
 
+    const setModuleToBePracticed = (moduleNumber: number) => {
+        sessionStorage.setItem("module", `${moduleNumber}`);
+        setModuleNumber(moduleNumber);
+    };
+
     return <>
         <div className={styles["main-container-module-practice"]}>
-            {startedModulePractice ? <TestPage toggleModulePractice={toggleStartedModulePractice}/> :
+            {startedModulePractice || sessionStorage["module"] ? <TestPage toggleModulePractice={toggleStartedModulePractice} moduleNumber={moduleNumber} /> :
                 <>
                     <Header />
-                    <ModuleContent toggleModulePractice={toggleStartedModulePractice}/>
+                    <ModuleContent toggleModulePractice={toggleStartedModulePractice} setModuleToBePracticed={setModuleToBePracticed} />
                     <div className={styles["divisor-line-container"]}>
                         <div className={styles["divisor-line"]}></div>
                     </div>

@@ -1,75 +1,184 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles-pages/module-practice.module.css"
-import { toggleFunctionProp } from "./types";
-import Header from "./components/header-test"
+import Header from "./components/header-test";
+import LeaveTest from "./components/leaveTestConfirmation"
+import { auth, db } from "../../config/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
-const TestPage = ({ toggleModulePractice }: toggleFunctionProp) => {
+interface TestPageProps {
+    toggleModulePractice: () => void;
+    moduleNumber: number;
+}
+
+interface questionType {
+    correcta: number,
+    pregunta: string,
+    respuestas: string[],
+}
+
+const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
 
     const [isQuestionChecked, setIsQuestionChecked] = useState(false);
+    const [loading, setIsLoading] = useState(true);
+
+    const [questions, setQuestions] = useState<questionType[]>([]);
+    const [totalAmountOfQuestions, setTotalAmountOfQuestions] = useState(0);
+    const [userWantsToLeave, setUserWantsToLeave] = useState(false)
+    const [questionCounter, setQuestionCounter] = useState<number>(
+        () => Number(sessionStorage.getItem('current_question')) || 0
+    );
+    const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+
+    const user = auth.currentUser;
+
+    if (!user) {
+        throw new Error("Usuario no autenticado");
+    }
 
     const checkQuestion = () => {
         setIsQuestionChecked(e => !e);
     }
 
-    return <>
-        <div className={styles["main-container-test"]}>
-            <div className={styles["header-container"]}>
-                <Header toggleModulePractice={toggleModulePractice} />
-            </div>
+    const continueWithNextQuestion = () => {
+        setQuestionCounter((e: number) => {
+            const currentQuestion = e + 1;
+            sessionStorage.setItem("current_question", `${currentQuestion}`);
+            return e + 1;
+        })
+        setIsQuestionChecked(false);
+        setSelectedAnswer(null);
+    };
+
+    const saveQuestionInCaseOfReload = (questions: any) => {
+        sessionStorage.setItem("questions", JSON.stringify(questions));
+    };
+
+    const toggleLeaveTestMessage = () => {
+        setUserWantsToLeave(e => !e);
+    };
+
+    const handleAnswerSelection = (index: number) => {
+        setSelectedAnswer(index);
+    };
+
+    useEffect(() => {
+        const getModuleQuestions = async () => {
+            try {
+                setIsLoading(true);
+                const savedQuestionsStr = sessionStorage.getItem("questions");
+
+                if (savedQuestionsStr) {
+                    const savedQuestions = JSON.parse(savedQuestionsStr);
+                    setQuestions(savedQuestions);
+                    setTotalAmountOfQuestions(savedQuestions.length);
+                    setIsLoading(false);
+                    return;
+                }
+
+                const moduleQuestions: questionType[] = [];
+
+                const questionsInModuleRef = collection(db, "preguntas", `Modulo_${moduleNumber}`, "preguntas");
+                const questionsSnap = await getDocs(questionsInModuleRef);
+
+                questionsSnap.forEach((doc) => {
+                    const data = doc.data();
+
+                    const dataInCorrectFormat = {
+                        correcta: data.correcta,
+                        pregunta: data.pregunta,
+                        respuestas: data.respuestas,
+                    }
+
+                    moduleQuestions.push(dataInCorrectFormat);
+                });
+
+                setQuestions(moduleQuestions);
+                saveQuestionInCaseOfReload(moduleQuestions);
+                setTotalAmountOfQuestions(moduleQuestions.length);
+            } catch (error) {
+                console.error(`Error al intentar obtener las preguntas: ${error}`);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        getModuleQuestions();
+    }, [moduleNumber]); // Añadido moduleNumber como dependencia para recargar si cambia
+
+    const renderCurrentQuestion = () => {
+        if (loading || questions.length === 0 || questionCounter >= questions.length) {
+            return <div className={styles["loading"]}>Cargando...</div>;
+        }
+
+        const currentQuestion = questions[questionCounter];
+        const isCorrect = selectedAnswer === currentQuestion.correcta;
+
+        return (
             <div className={styles["question-container"]}>
                 <div className={styles["question-content-container"]}>
                     <div className={styles["question-title"]}>
-                        <div className={styles["answer-state"]}>
-                            <small>Correcto!</small>
-                        </div>
-                        <h3>¿Que lengua es oficial en el País Vasco?</h3>
+                        {isQuestionChecked && (
+                            <div className={styles["answer-state"]}>
+                                <small>{isCorrect ? "Correcto!" : "Incorrecto"}</small>
+                            </div>
+                        )}
+                        <h3>{currentQuestion.pregunta}</h3>
                     </div>
-
                     <div className="question-answers-container">
-                        <div className={styles["answer-container"]}>
-                            <input
-                                type="radio"
-                                className={styles["radio-style"]}
-                                name={`radio-question`}
-                                id={`radio-question`}
-                                checked={false} />
-                            <label htmlFor="radio-question">El Bable</label>
-                        </div>
-                        <div className={styles["answer-container"]}>
-                            <input
-                                type="radio"
-                                className={styles["radio-style"]}
-                                name={`radio-question`}
-                                id={`radio-question`}
-                                checked={true} />
-                            <label htmlFor="radio-question">El Aragonés</label>
-                            <div className={styles["wrong-answer-icon-container"]}>
-                                <i className="bi bi-x"></i>
-                            </div>
-                        </div>
-                        <div className={styles["answer-container"]}>
-                            <input
-                                type="radio"
-                                className={styles["radio-style"]}
-                                name={`radio-question`}
-                                id={`radio-question`}
-                                checked={false} />
-                            <label htmlFor="radio-question">El Euskera</label>
-                            <div className={styles["correct-answer-icon-container"]}>
-                                <i className="bi bi-check-lg"></i>
-                            </div>
-                        </div>
-                    </div>
+                        {currentQuestion.respuestas.map((answer, index) => (
+                            <div
+                                className={styles["answer-container"]}
+                                key={`${questionCounter}_${index}_answers`}
+                            >
+                                <input
+                                    type="radio"
+                                    className={styles["radio-style"]}
+                                    name={`radio-question-${questionCounter}`}
+                                    id={`radio-question-${questionCounter}-${index}`}
+                                    checked={selectedAnswer === index}
+                                    onChange={() => handleAnswerSelection(index)}
+                                />
+                                <label htmlFor={`radio-question-${questionCounter}-${index}`}>{answer}</label>
 
+                                {isQuestionChecked && (
+                                    index === currentQuestion.correcta ? (
+                                        <div className={`${styles["correct-answer-icon-container"]} ${selectedAnswer === index ? styles["selected-answer"] : styles["not-selected-answer"]}`}>
+                                            <i className="bi bi-check-lg"></i>
+                                        </div>
+                                    ) : (
+                                        <div className={`${styles["wrong-answer-icon-container"]} ${selectedAnswer === index ? styles["selected-answer"] : styles["not-selected-answer"]}`}>
+                                            <i className="bi bi-x"></i>
+                                        </div>
+                                    )
+                                )}
+                            </div>
+                        ))}
+                    </div>
                     <div className={styles["button-container"]}>
-                        {isQuestionChecked ? <>
-                            <button onClick={checkQuestion}>Finalizar</button>
-                            <button onClick={checkQuestion}>Siguiente Pregunta</button>
-                        </>
-                            : <button onClick={checkQuestion}>Comprobar</button>}
+                        {isQuestionChecked ? (
+                            <>
+                                {questionCounter === questions.length - 1 ? (
+                                    <button onClick={() => setIsQuestionChecked(false)}>Finalizar  Prueba</button>
+                                ) : (
+                                    <button onClick={continueWithNextQuestion}>Siguiente Pregunta</button>)
+                                }
+                            </>
+                        ) : (
+                            <button onClick={checkQuestion} disabled={selectedAnswer === null}>Comprobar</button>
+                        )}
                     </div>
                 </div>
             </div>
+        );
+    };
+
+    return <>
+        <div className={styles["main-container-test"]}>
+            {userWantsToLeave ? <LeaveTest toggleModulePractice={toggleModulePractice} toggleLeaveTestMessage={toggleLeaveTestMessage} /> : null}
+            <div className={styles["header-container"]}>
+                <Header totalAmountOfQuestions={totalAmountOfQuestions} moduleSelected={moduleNumber} toggleLeaveTestMessage={toggleLeaveTestMessage} currentQuestion={questionCounter} />
+            </div>
+            {renderCurrentQuestion()}
             <div className={styles["finish-practice-container"]}>
                 <button className={styles["finish-practice-button"]}>Terminar Práctica</button>
             </div>

@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "../../../styles-pages/module-practice.module.css"
 
-const QuestionsCounter = () => {
+const QuestionsCounter = ({totalQuestions, currentQuestion} : {totalQuestions : number, currentQuestion: number}) => {
     return <>
-        <small className={styles["question-counter-text"]}>Pregunta 01/80</small>
+        <small className={styles["question-counter-text"]}>Pregunta {currentQuestion + 1}/{totalQuestions}</small>
     </>
 }
 
