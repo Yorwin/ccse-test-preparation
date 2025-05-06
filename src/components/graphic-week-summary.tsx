@@ -3,7 +3,7 @@ import styles from "./graphic-test-made.module.css"
 import { db } from "../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth } from "../config/firebase";
-import { getFullDate, getDaysInMonth, getCurrentMonth, getCurrentDay, getWeekDay } from "../functions/functions";
+import { getFullDate, getDaysInMonth, getCurrentMonth, getCurrentDay } from "../functions/functions";
 
 interface weekItem {
     weekDay: string,
@@ -144,7 +144,7 @@ const GraphicWeekSummary = () => {
 
         //Aplatamos el array para mejorar su manipulación.
         const flattenedProcessedArray = processedWeekArray.flat();
-        
+
         //Esta función devuelve un array con los días de la semana habiendo sumado todas las duraciones facilitadas.  
         const summarizedWeekArray = flattenedProcessedArray.reduce((acc: weekItem[], curr: weekItem) => {
 
@@ -176,7 +176,11 @@ const GraphicWeekSummary = () => {
 
         const dataOfTheWeek = await Promise.all(monthDays.map(async (e, index) => {
             const weekInfoRef = collection(db, "users", user.uid, "resultados");
-            const q = query(weekInfoRef, where("Date", "==", e));
+            const q = query(
+                weekInfoRef,
+                where("Date", "==", e),
+                where("testId", "==", "test_simulation")
+            );
             const snapshot = await getDocs(q);
 
             const resultWeekDay = calculateWeekDay(index)

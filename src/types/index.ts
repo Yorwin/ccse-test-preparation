@@ -18,7 +18,7 @@ export type AnswersResults = {
     answer : number,
 }
 
-interface verifiedAnswersBeforeResults {
+export interface verifiedAnswersBeforeResults {
     [code: string]: number;
 }
 
@@ -28,6 +28,12 @@ export interface SaveResults {
     answers : verifiedAnswersBeforeResults[];
     duration : number,
     questions : string[],
+}
+
+export interface SaveResultsModulePractice {
+    testId : string,
+    score : number, 
+    answers : verifiedAnswersBeforeResults[];
 }
 
 export interface getResult {

@@ -25,10 +25,13 @@ const GraphicHoursSimulated = () => {
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            const duration = data.duration;
-            const timeUsed = testTime - duration;
 
-            hoursSimulated.push(timeUsed);
+            if (data.testId === "test_simulation") {
+                const duration = data.duration;
+                const timeUsed = testTime - duration;
+
+                hoursSimulated.push(timeUsed);
+            }
         })
 
         return hoursSimulated;

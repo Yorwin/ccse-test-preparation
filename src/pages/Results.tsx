@@ -36,9 +36,11 @@ const Results = () => {
 
         querySnapshot.forEach(doc => {
             const data = doc.data();
-            const score = data.score;
 
-            totalTestsResults.push(score);
+            if (data.testId === "test_simulation") {
+                const score = data.score;
+                totalTestsResults.push(score);
+            }
         })
 
         return totalTestsResults;
