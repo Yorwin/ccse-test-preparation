@@ -68,7 +68,7 @@ export const saveResultsTest = async ({ testId, score, answers, duration, questi
 
 //Función para guardar prácticas del modulo.
 
-export const saveModulePractice = async ({ testId, score, answers }: SaveResultsModulePractice) => {
+export const saveModulePractice : SaveResultsModulePractice = async (testId, score, answers) => {
   try {
     const user = auth.currentUser;
     if (!user) {

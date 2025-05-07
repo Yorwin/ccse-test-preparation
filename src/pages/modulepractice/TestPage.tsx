@@ -3,27 +3,24 @@ import styles from "../../styles-pages/module-practice.module.css"
 import Header from "./components/header-test";
 import LeaveTest from "./components/leaveTestConfirmation"
 import TestResultsPage from "./components/testResultsPage";
+import CurrentQuestion from "./components/CurrentQuestion";
 import { saveModulePractice } from "../../config/firebase";
-import { verifiedAnswersBeforeResults } from "../../types";
 import { auth, db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { QAEntry, questionType, saveQuestionAnswerLocally, saveAnswersInServer, savedQuestionsInServer } from "./types";
 
 interface TestPageProps {
     toggleModulePractice: () => void;
     moduleNumber: number;
 }
 
-type QAEntry = {
-    [key: string]: string | number;
-}
-
-interface questionType {
-    correcta: number,
-    pregunta: string,
-    respuestas: string[],
-}
-
 const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
+
+    const user = auth.currentUser;
+
+    if (!user) {
+        throw new Error("Usuario no autenticado");
+    }
 
     const [isQuestionChecked, setIsQuestionChecked] = useState(false);
     const [loading, setIsLoading] = useState(true);
@@ -38,50 +35,31 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
     const [showTestResults, setShowTestResults] = useState(false);
     const [arrayQuestionsAndAnswers, setArrayQuestionsAndAnswers] = useState<QAEntry[]>([]);
 
-    const user = auth.currentUser;
+    //SALIR DE LA PRACTICA.
 
-    if (!user) {
-        throw new Error("Usuario no autenticado");
-    }
-
-    const finishModulePractice = async (lastQuestion: string, lastAnswer: number | string | null) => {
-        try {
-
-            if (lastAnswer === null) {
-                return lastAnswer = "Pregunta no respondida"
-            }
-
-            const newEntry = {
-                [lastQuestion]: lastAnswer,
-            };
-
-            const updatedArray = [...arrayQuestionsAndAnswers, newEntry];
-            setArrayQuestionsAndAnswers(updatedArray);
-            saveQuestionInMemory(updatedArray);
-
-            const score = await calculateModulePracticeScore();
-
-            const params = {
-                testId: "module-practice",
-                answers: updatedArray,
-            }
-
-            const storedAnswers = sessionStorage.getItem("respuestas");
-            let answers;
-
-            if (storedAnswers !== null) {
-                answers = JSON.parse(storedAnswers);
-            } else {
-                console.warn("No se encontraron respuestas en sessionStorage");
-            }
-
-            saveQuestionsInServer("module-practice", score, answers)
-            setShowTestResults(true);
-        } catch (error) {
-            console.error("Error al guardar las preguntas" + error);
-        }
+    const toggleLeaveTestMessage = () => {
+        setUserWantsToLeave(e => !e);
     };
 
+    const goBackToHome = () => {
+        setShowTestResults(e => !e);
+    };
+
+    //REVISAR PREGUNTA.
+
+    const checkQuestion = () => {
+        setIsQuestionChecked(e => !e);
+    }
+
+    //MANEJAR SELECCIÓN DE PREGUNTA
+
+    const handleAnswerSelection = (index: number) => {
+        setSelectedAnswer(index);
+    };
+
+    // LOGICA PARA GUARDAR LOS RESULTADOS CORRESPONDIENTES AL MODULO.
+
+    //Calcular respuestas.
     const calculateModulePracticeScore = async () => {
         const storedAnswers = sessionStorage.getItem("respuestas");
         let score = 0;
@@ -106,30 +84,25 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
         return score;
     };
 
-    const saveQuestionsInServer = (testId: string, score: number, answers: verifiedAnswersBeforeResults[]) => {
-
-        const param = {
-            testId: testId,
-            score: score,
-            answers: answers,
-        }
-        
-        saveModulePractice(param);
+    //GUARDAR LAS PREGUNTAS EN EL SERVIDOR.
+    const saveQuestionsInServer: savedQuestionsInServer = (testId, score, answers) => {
+        saveModulePractice(testId, score, answers);
     };
 
-    const goBackToHome = () => {
-        setShowTestResults(e => !e);
-    };
+    //GUARDAR LA PREGUNTA LOCALMENTE.
 
-    const checkQuestion = () => {
-        setIsQuestionChecked(e => !e);
-    }
-
+    //Función para guardar array en memoria.
     const saveQuestionInMemory = (value: any) => {
         sessionStorage.setItem("respuestas", `${JSON.stringify(value)}`);
     };
 
-    const continueWithNextQuestion = (key: string, value: number | null | string) => {
+    //Función para guardar en caso de recarga.
+    const saveQuestionInCaseOfReload = (questions: any) => {
+        sessionStorage.setItem("questions", JSON.stringify(questions));
+    };
+
+    //Guardar la pregunta en formato de Array en Session Storage.
+    const saveQuestionAnswer: saveQuestionAnswerLocally = (key, value) => {
 
         if (value === null) {
             return value = "Pregunta no respondida"
@@ -142,29 +115,52 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
         const updatedArray = [...arrayQuestionsAndAnswers, newEntry];
         setArrayQuestionsAndAnswers(updatedArray);
 
-        setQuestionCounter((e: number) => {
-            const currentQuestion = e + 1;
-            sessionStorage.setItem("current_question", `${currentQuestion}`);
-            return e + 1;
-        })
+        if (questionCounter + 1 !== totalAmountOfQuestions) {
+
+            setQuestionCounter((e: number) => {
+                const currentQuestion = e + 1;
+                sessionStorage.setItem("current_question", `${currentQuestion}`);
+                return e + 1;
+            })
+
+            checkQuestion();
+            setSelectedAnswer(null);
+        }
 
         saveQuestionInMemory(updatedArray);
-        setIsQuestionChecked(false);
-        setSelectedAnswer(null);
     };
 
-    const saveQuestionInCaseOfReload = (questions: any) => {
-        sessionStorage.setItem("questions", JSON.stringify(questions));
+    //OBTENER PREGUNTAS RESPONDIDAS LOCALMENTE.
+
+    const getAnsweredQuestions = () => {
+        const storedAnswers = sessionStorage.getItem("respuestas");
+        let answers;
+
+        if (storedAnswers !== null) {
+            answers = JSON.parse(storedAnswers);
+        } else {
+            console.warn("No se encontraron respuestas en sessionStorage");
+        }
+
+        return answers;
     };
 
-    const toggleLeaveTestMessage = () => {
-        setUserWantsToLeave(e => !e);
+    //FINALIZAR PRÁCTICA DEL MODULO Y GUARDAR EN EL SERVIDOR LAS RESPUESTAS.
+    const finishModulePractice: saveAnswersInServer = async (lastQuestion, lastAnswer) => {
+        try {
+            saveQuestionAnswer(lastQuestion, lastAnswer);
+
+            const score = await calculateModulePracticeScore();
+            const answers = getAnsweredQuestions();
+
+            saveQuestionsInServer("module-practice", score, answers)
+            setShowTestResults(true);
+        } catch (error) {
+            console.error("Error al guardar las preguntas" + error);
+        }
     };
 
-    const handleAnswerSelection = (index: number) => {
-        setSelectedAnswer(index);
-    };
-
+    //FUNCION PARA OBTENER LAS PREGUNTAS DE CADA MÓDULO.
     const getModuleQuestions = async () => {
         try {
             setIsLoading(true);
@@ -207,76 +203,7 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
 
     useEffect(() => {
         getModuleQuestions();
-    }, [moduleNumber]); 
-
-    const renderCurrentQuestion = () => {
-        if (loading || questions.length === 0 || questionCounter >= questions.length) {
-            return <div className={styles["loading"]}>Cargando...</div>;
-        }
-
-        const currentQuestion = questions[questionCounter];
-        const isCorrect = selectedAnswer === currentQuestion.correcta;
-
-        return (
-            <div className={styles["question-container"]}>
-                <div className={styles["question-content-container"]}>
-                    <div className={styles["question-title"]}>
-                        {isQuestionChecked && (
-                            <div className={styles["answer-state"]}>
-                                <small>{isCorrect ? "Correcto!" : "Incorrecto"}</small>
-                            </div>
-                        )}
-                        <h3>{currentQuestion.pregunta}</h3>
-                    </div>
-                    <div className="question-answers-container">
-                        {currentQuestion.respuestas.map((answer, index) => (
-                            <div
-                                className={styles["answer-container"]}
-                                key={`${questionCounter}_${index}_answers`}
-                            >
-                                <input
-                                    type="radio"
-                                    className={styles["radio-style"]}
-                                    name={`radio-question-${questionCounter}`}
-                                    id={`radio-question-${questionCounter}-${index}`}
-                                    checked={selectedAnswer === index}
-                                    onChange={() => handleAnswerSelection(index)}
-                                />
-                                <label htmlFor={`radio-question-${questionCounter}-${index}`}>{answer}</label>
-
-                                {isQuestionChecked && (
-                                    index === currentQuestion.correcta ? (
-                                        <div className={`${styles["correct-answer-icon-container"]} ${selectedAnswer === index ? styles["selected-answer"] : styles["not-selected-answer"]}`}>
-                                            <i className="bi bi-check-lg"></i>
-                                        </div>
-                                    ) : (
-                                        <div className={`${styles["wrong-answer-icon-container"]} ${selectedAnswer === index ? styles["selected-answer"] : styles["not-selected-answer"]}`}>
-                                            <i className="bi bi-x"></i>
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                    <div className={styles["button-container"]}>
-                        {isQuestionChecked ? (
-                            <>
-                                {questionCounter === questions.length - 1 ? (
-                                    <button onClick={() => {
-                                        finishModulePractice(currentQuestion.pregunta, selectedAnswer);
-                                    }}>Finalizar  Prueba</button>
-                                ) : (
-                                    <button onClick={() => continueWithNextQuestion(currentQuestion.pregunta, selectedAnswer)}>Siguiente Pregunta</button>)
-                                }
-                            </>
-                        ) : (
-                            <button onClick={checkQuestion} disabled={selectedAnswer === null}>Comprobar</button>
-                        )}
-                    </div>
-                </div>
-            </div>
-        )
-    };
+    }, [moduleNumber]);
 
     return (
         <div className={styles["main-container-test"]}>
@@ -300,7 +227,16 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
                         />
                     </div>
 
-                    {renderCurrentQuestion()}
+                    <CurrentQuestion
+                        loading={loading}
+                        questions={questions}
+                        questionCounter={questionCounter}
+                        selectedAnswer={selectedAnswer}
+                        handleAnswerSelection={handleAnswerSelection}
+                        finishModulePractice={finishModulePractice}
+                        saveQuestionAnswer={saveQuestionAnswer}
+                        isQuestionChecked={isQuestionChecked}
+                        checkQuestion={checkQuestion} />
 
                     <div className={styles["finish-practice-container"]}>
                         <button className={styles["finish-practice-button"]}>
