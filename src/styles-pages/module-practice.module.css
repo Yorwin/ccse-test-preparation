@@ -1,8 +1,21 @@
 .main-container-module-practice {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     height: 100vh;
     padding: 2rem 2rem 0rem 2rem;
-    overflow-y: hidden;
+    overflow: hidden;
+}
+
+.main-container-module-practice-home {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100vh;
+    padding: 2rem 2rem 0rem 2rem;
+    overflow: hidden;
 }
 
 .header-container {
@@ -21,9 +34,16 @@
     border: none;
 }
 
+.module-clickable-content {
+    width: 100%;
+}
+
 .button-module {
+    display: flex;
+    justify-content: center;
     background-color: transparent;
     border: none;
+    width: 100%;
 }
 
 .module-practice-title h2 {
@@ -36,7 +56,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 285px;
+    width: 100%;
     height: 170px;
     border: .1rem #322B2A solid;
     border-radius: 1.5rem;
@@ -50,6 +70,7 @@
 .module-desc {
     width: 80%;
     text-align: center;
+    font-size: 1rem;
 }
 
 .module-content-container {
@@ -63,13 +84,12 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .divisor-line {
     width: 80vw;
     height: 12px;
-    margin-bottom: 1rem;
     background-color: #322B2A;
 }
 
@@ -85,7 +105,7 @@
 .title-container h2 {
     font-size: 1.6rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .column-chart {
@@ -109,7 +129,29 @@
     font-size: .9rem;
 }
 
+@media screen and (max-width: 1500px) {
+    .module-desc {
+        font-size: .9rem;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .module-desc {
+        font-size: .7rem;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .module-desc {
+        font-size: .5rem;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .main-container-module-practice-home {
+        overflow-y: visible;
+    }
+
     .module-practice-title h2 {
         font-size: 2rem;
     }
@@ -130,8 +172,16 @@
     }
 
     .module-practice {
-        width: 70vw;
+        width: 90vw;
         height: 200px;
+    }
+
+    .module-desc {
+        font-size: 1rem;
+    }
+
+    .title-container h2 {
+        font-size: 1.2rem;
     }
 }
 
@@ -177,7 +227,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    padding: 1rem;
+    padding: 0.7rem;
 }
 
 .question-counter-text {
@@ -188,10 +238,42 @@
 
 .title-test {
     position: absolute;
+    width: 100%;
+    text-align: center;
     left: 50%;
     top: 35px;
     transform: translateX(-50%);
     color: #CF4037;
+}
+
+/* Header Media Queries */
+
+@media screen and (max-width:768px) {
+    .title-test {
+        top: 60px;
+        color: #CF4037;
+    }
+
+    .title-test h1 {
+        font-size: 1.8rem;
+    }
+
+    .question-counter-text {
+        font-size: 1.2rem;
+        font-weight: 650;
+        color: #A55A55;
+    }
+
+    .container-exit-icon h2 {
+        margin-bottom: 0rem;
+        padding-left: 1rem;
+        font-size: 1.6rem;
+    }
+
+    .header-container div button i {
+        font-size: 2rem;
+        color: #FA3B2D;
+    }
 }
 
 .finish-practice-container {
@@ -231,7 +313,7 @@
 }
 
 .question-title h3 {
-   text-align: center;
+    text-align: center;
     font-size: 1.8rem;
     margin-bottom: 3.5rem;
 }
@@ -453,4 +535,23 @@
 
 .button-container button:disabled:hover {
     animation: none;
+}
+
+@media screen and (max-width: 768px) {
+    .question-content-container {
+        width: 90%;
+    }
+
+    .question-title {
+        width: 100%;
+    }
+
+    .question-title h3 {
+        width: 100%;
+        font-size: 1.4rem;
+    }
+
+    .button-container button {
+        width: 100%;
+    }
 }

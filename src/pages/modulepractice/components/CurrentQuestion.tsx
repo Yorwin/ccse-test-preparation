@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../../../styles-pages/module-practice.module.css"
 import { questionType, saveAnswersInServer, saveQuestionAnswerLocally } from "../types/index";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 interface CurrentQuestionProps {
     loading: boolean,
@@ -17,7 +18,7 @@ interface CurrentQuestionProps {
 const CurrentQuestion = ({ loading, questions, questionCounter, selectedAnswer, handleAnswerSelection, finishModulePractice, saveQuestionAnswer, isQuestionChecked, checkQuestion }: CurrentQuestionProps) => {
 
     if (loading || questions.length === 0 || questionCounter >= questions.length) {
-        return <div className={styles["loading"]}>Cargando...</div>;
+        return <LoadingScreen />;
     }
 
     const currentQuestion = questions[questionCounter];

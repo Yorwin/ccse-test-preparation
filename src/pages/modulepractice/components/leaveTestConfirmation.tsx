@@ -2,18 +2,11 @@ import React from "react";
 import styles from "../styles/leave-test-confirmation.module.css"
 
 interface leaveTestConfirmation {
-    toggleModulePractice : () => void;
-    toggleLeaveTestMessage : () => void;
+    leaveTest: () => void;
+    toggleLeaveTestMessage: () => void;
 }
 
-const leaveTestConfirmation = ({toggleModulePractice, toggleLeaveTestMessage} : leaveTestConfirmation) => {
-
-    const leaveModulePractice = () => {
-        toggleModulePractice();
-        delete sessionStorage.questions;
-        delete sessionStorage.module;
-        delete sessionStorage.current_question;
-    };
+const leaveTestConfirmation = ({ leaveTest, toggleLeaveTestMessage }: leaveTestConfirmation) => {
 
     return (
         <div className={styles["main-container-leave-test"]}>
@@ -26,7 +19,7 @@ const leaveTestConfirmation = ({toggleModulePractice, toggleLeaveTestMessage} : 
                 </div>
                 <div className={styles["button-container"]}>
                     <button onClick={toggleLeaveTestMessage} className={styles["cancel-button"]}>Cancelar</button>
-                    <button onClick={leaveModulePractice} className={styles["leave-button"]}>Salir sin guardar</button>
+                    <button onClick={leaveTest} className={styles["leave-button"]}>Salir sin guardar</button>
                 </div>
             </div>
         </div>

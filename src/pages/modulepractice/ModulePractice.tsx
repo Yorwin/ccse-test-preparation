@@ -20,17 +20,21 @@ const ModulePractice = () => {
     };
 
     return <>
-        <div className={styles["main-container-module-practice"]}>
-            {startedModulePractice || sessionStorage["module"] ? <TestPage toggleModulePractice={toggleStartedModulePractice} moduleNumber={moduleNumber} /> :
-                <>
+        {startedModulePractice || sessionStorage["module"] ?
+            <div className={styles["main-container-module-practice"]}>
+                <TestPage toggleModulePractice={toggleStartedModulePractice} moduleNumber={moduleNumber} />
+            </div>
+            :
+            <>
+                <div className={styles["main-container-module-practice-home"]}>
                     <Header />
                     <ModuleContent toggleModulePractice={toggleStartedModulePractice} setModuleToBePracticed={setModuleToBePracticed} />
                     <div className={styles["divisor-line-container"]}>
                         <div className={styles["divisor-line"]}></div>
                     </div>
                     <Graph />
-                </>}
-        </div>
+                </div>
+            </>}
     </>
 };
 

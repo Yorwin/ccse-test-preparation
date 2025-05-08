@@ -30,7 +30,7 @@ export interface SaveResults {
     questions : string[],
 }
 
-export type SaveResultsModulePractice = (testId : string, score : number, answers : verifiedAnswersBeforeResults[]) => void;
+export type SaveResultsModulePractice = (testId : string, score : number, answers : verifiedAnswersBeforeResults[]) => Promise<string>;
 
 export interface getResult {
     id: string;

@@ -1,13 +1,18 @@
 .loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     background: linear-gradient(135deg, #FA3B2D, #CF4037, #A55A55);
     color: #FFF;
     text-align: center;
-    z-index: 5;
+    z-index: 9999;
+    pointer-events: all;
 }
 
 .loading-text {

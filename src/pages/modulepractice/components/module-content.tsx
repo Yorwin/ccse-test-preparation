@@ -1,13 +1,12 @@
 import React from "react";
 import styles from "../../../styles-pages/module-practice.module.css"
-import { toggleFunctionProp } from "../types";
 
 interface ModuleContent {
-    setModuleToBePracticed : (param : number) => void;
-    toggleModulePractice : () => void;
+    setModuleToBePracticed: (param: number) => void;
+    toggleModulePractice: () => void;
 }
 
-const ModuleContent = ({toggleModulePractice, setModuleToBePracticed} : ModuleContent) => {
+const ModuleContent = ({ toggleModulePractice, setModuleToBePracticed }: ModuleContent) => {
 
     const arrayModulePractice = [{
         desc: "Gobierno, legislación y participación ciudadana.",

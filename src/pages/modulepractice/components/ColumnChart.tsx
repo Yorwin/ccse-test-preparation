@@ -1,47 +1,40 @@
 import React, { useState } from "react";
-import styles from "../../../styles-pages/module-practice.module.css"
+import styles from "../../../styles-pages/module-practice.module.css";
 
 const ColumnChart = () => {
-    // Datos para cada módulo (porcentaje de preparación)
-    const [moduleData, setModuleData] = useState([
-        65, // Módulo 1
-        75, // Módulo 2
-        45, // Módulo 3
-        80, // Módulo 4
-        60  // Módulo 5
-    ]);
+    const [moduleData, setModuleData] = useState([65, 75, 45, 80, 60]);
 
-    // Configuración del gráfico
     const svgWidth = 1100;
     const svgHeight = 500;
     const padding = { top: 40, right: 40, bottom: 60, left: 60 };
     const chartWidth = svgWidth - padding.left - padding.right;
     const chartHeight = svgHeight - padding.top - padding.bottom;
 
-    // Valores del eje Y
     const yAxisValues = [0, 20, 40, 60, 80, 100];
-
-    // Función para generar el ancho de las columnas
     const columnWidth = chartWidth / moduleData.length * 0.6;
     const columnSpacing = chartWidth / moduleData.length;
-
-    // Nombres de los módulos
     const moduleNames = ["Módulo 1", "Módulo 2", "Módulo 3", "Módulo 4", "Módulo 5"];
 
-    // Función para convertir valores de porcentaje a coordenadas Y
     const scaleY = (value: number) => {
         return chartHeight - (value / 100) * chartHeight + padding.top;
     };
 
     return (
         <div className={styles["column-chart"]}>
-            <svg width={svgWidth} height={svgHeight} className={styles["charts-border"]} style={{
-                borderTop: '5px solid #322B2A',
-                borderLeft: '5px solid #322B2A',
-                borderRight: '5px solid #322B2A',
-                borderBottom: 'none'
-            }}>
-
+            <svg
+                viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                preserveAspectRatio="xMidYMid meet"
+                className={styles["charts-border"]}
+                style={{
+                    width: "100%",
+                    height: "auto",
+                    maxWidth: "1100px",
+                    borderTop: '5px solid #322B2A',
+                    borderLeft: '5px solid #322B2A',
+                    borderRight: '5px solid #322B2A',
+                    borderBottom: 'none'
+                }}
+            >
                 {/* Eje Y con etiquetas */}
                 {yAxisValues.map((value, index) => (
                     <g key={`y-axis-${index}`}>
@@ -63,7 +56,6 @@ const ColumnChart = () => {
 
                     return (
                         <g key={`column-${index}`}>
-                            {/* Columna */}
                             <rect
                                 x={x - columnWidth / 2}
                                 y={scaleY(value)}
@@ -74,7 +66,6 @@ const ColumnChart = () => {
                                 strokeWidth="1"
                             />
 
-                            {/* Valor de la columna */}
                             <text
                                 x={x}
                                 y={scaleY(value) - 5}
@@ -84,7 +75,6 @@ const ColumnChart = () => {
                                 {value}%
                             </text>
 
-                            {/* Etiqueta del eje X */}
                             <text
                                 x={x}
                                 y={padding.top + chartHeight + 25}
@@ -117,6 +107,6 @@ const ColumnChart = () => {
             </svg>
         </div>
     );
-}
+};
 
 export default ColumnChart;

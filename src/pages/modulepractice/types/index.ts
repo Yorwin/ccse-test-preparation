@@ -18,4 +18,4 @@ export interface questionType {
 
 export type saveQuestionAnswerLocally = (key: string, value: SavedQuestionValue) => void;
 export type saveAnswersInServer = (key: string, value: SavedQuestionValue) => void;
-export type savedQuestionsInServer = (testId: string, score: number, answers: verifiedAnswersBeforeResults[]) => void;
+export type saveQuestionsInServer = (testId: string, score: number, answers: verifiedAnswersBeforeResults[]) => void;

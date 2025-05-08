@@ -7,7 +7,8 @@ import CurrentQuestion from "./components/CurrentQuestion";
 import { saveModulePractice } from "../../config/firebase";
 import { auth, db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { QAEntry, questionType, saveQuestionAnswerLocally, saveAnswersInServer, savedQuestionsInServer } from "./types";
+import { QAEntry, questionType, saveQuestionAnswerLocally, saveAnswersInServer, saveQuestionsInServer } from "./types";
+import { useNavigate } from "react-router-dom";
 
 interface TestPageProps {
     toggleModulePractice: () => void;
@@ -22,6 +23,8 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
         throw new Error("Usuario no autenticado");
     }
 
+    //useStates
+
     const [isQuestionChecked, setIsQuestionChecked] = useState(false);
     const [loading, setIsLoading] = useState(true);
 
@@ -35,6 +38,13 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
     const [showTestResults, setShowTestResults] = useState(false);
     const [arrayQuestionsAndAnswers, setArrayQuestionsAndAnswers] = useState<QAEntry[]>([]);
 
+    //Navigate
+
+    const navigate = useNavigate();
+
+    //Results Id
+    const [resultId, setResultId] = useState<string | null>(null);
+
     //SALIR DE LA PRACTICA.
 
     const toggleLeaveTestMessage = () => {
@@ -42,7 +52,22 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
     };
 
     const goBackToHome = () => {
-        setShowTestResults(e => !e);
+
+        const keys = [];
+
+        for (let i = 0; i < sessionStorage.length; i++) {
+            const key = sessionStorage.key(i);
+            if (key) { // Verificamos que key no sea null
+                keys.push(key);
+            }
+        }
+
+        // Ahora elimina los items usando las keys guardadas
+        keys.forEach(key => {
+            sessionStorage.removeItem(key);
+        });
+
+        toggleModulePractice();
     };
 
     //REVISAR PREGUNTA.
@@ -85,8 +110,9 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
     };
 
     //GUARDAR LAS PREGUNTAS EN EL SERVIDOR.
-    const saveQuestionsInServer: savedQuestionsInServer = (testId, score, answers) => {
-        saveModulePractice(testId, score, answers);
+    const saveQuestionsInServer: saveQuestionsInServer = async (testId, score, answers) => {
+        const modulePractice: string = await saveModulePractice(testId, score, answers);
+        setResultId(modulePractice);
     };
 
     //GUARDAR LA PREGUNTA LOCALMENTE.
@@ -153,7 +179,8 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
             const score = await calculateModulePracticeScore();
             const answers = getAnsweredQuestions();
 
-            saveQuestionsInServer("module-practice", score, answers)
+            saveQuestionsInServer("module-practice", score, answers);
+
             setShowTestResults(true);
         } catch (error) {
             console.error("Error al guardar las preguntas" + error);
@@ -207,13 +234,13 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
 
     return (
         <div className={styles["main-container-test"]}>
-            {showTestResults ? (
-                <TestResultsPage goBackToHome={goBackToHome} />
+            {showTestResults && resultId != null ? (
+                <TestResultsPage goBackToHome={goBackToHome} resultId={resultId} />
             ) : (
                 <>
                     {userWantsToLeave && (
                         <LeaveTest
-                            toggleModulePractice={toggleModulePractice}
+                            leaveTest={goBackToHome}
                             toggleLeaveTestMessage={toggleLeaveTestMessage}
                         />
                     )}
@@ -237,12 +264,6 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
                         saveQuestionAnswer={saveQuestionAnswer}
                         isQuestionChecked={isQuestionChecked}
                         checkQuestion={checkQuestion} />
-
-                    <div className={styles["finish-practice-container"]}>
-                        <button className={styles["finish-practice-button"]}>
-                            Terminar Práctica
-                        </button>
-                    </div>
                 </>
             )}
         </div>
