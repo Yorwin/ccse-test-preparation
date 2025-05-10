@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../../styles-pages/module-practice.module.css"
+import styles from "../styles/test-page.module.css"
 import { questionType, saveAnswersInServer, saveQuestionAnswerLocally } from "../types/index";
 import LoadingScreen from "../../../components/LoadingScreen";
 
@@ -35,7 +35,7 @@ const CurrentQuestion = ({ loading, questions, questionCounter, selectedAnswer, 
                     )}
                     <h3>{currentQuestion.pregunta}</h3>
                 </div>
-                <div className="question-answers-container">
+                <div className={styles["question-answers-container"]}>
                     {currentQuestion.respuestas.map((answer, index) => (
                         <div
                             className={styles["answer-container"]}

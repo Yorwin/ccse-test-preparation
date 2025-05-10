@@ -1,8 +1,7 @@
 import React from "react";
 import ExitTestIcon from "../../../components/exit-test-icon";
 import QuestionsCounter from "./questions-counter";
-import { toggleFunctionProp } from "../types/index"
-import styles from "../../../styles-pages/module-practice.module.css"
+import styles from "../styles/test-page.module.css"
 
 interface HeaderTest {
     totalAmountOfQuestions : number,

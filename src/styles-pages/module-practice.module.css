@@ -1,3 +1,5 @@
+/* MAIN CONTAINERS */
+
 .main-container-module-practice {
     display: flex;
     flex-direction: column;
@@ -6,6 +8,12 @@
     height: 100vh;
     padding: 2rem 2rem 0rem 2rem;
     overflow: hidden;
+}
+
+@media screen and (max-width:568px) {
+    .main-container-module-practice {
+        padding: 2rem 0.5rem 0rem 0.5rem;
+    }
 }
 
 .main-container-module-practice-home {
@@ -18,11 +26,15 @@
     overflow: hidden;
 }
 
+/* HEADER CONTAINER */
+
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
+/* ESTILO FLECHA */
 
 .header-container div i {
     color: #322B2A;
@@ -32,6 +44,24 @@
 .arrow-container {
     background-color: transparent;
     border: none;
+}
+
+/* ESTILO TITULO */
+
+.module-practice-title h2 {
+    color: #CF4037;
+    font-size: 2.4rem;
+}
+
+/* MODULOS A PRACTICAR BOTONES*/
+
+/* Contenedores */
+
+.module-content-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
 }
 
 .module-clickable-content {
@@ -46,26 +76,25 @@
     width: 100%;
 }
 
-.module-practice-title h2 {
-    color: #CF4037;
-    font-size: 2.4rem;
-}
-
 .module-practice {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 100%;
-    height: 170px;
+    height: 200px;
     border: .1rem #322B2A solid;
     border-radius: 1.5rem;
     padding: 2rem .5rem;
 }
 
+/* Icono */
+
 .module-practice i {
     color: #CF4037;
 }
+
+/* Descripcion */
 
 .module-desc {
     width: 80%;
@@ -73,11 +102,12 @@
     font-size: 1rem;
 }
 
-.module-content-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1.5rem;
-    margin-bottom: 2.5rem;
+/* LINEA DIVISORA */
+
+.divisor-line {
+    width: 80vw;
+    height: 12px;
+    background-color: #322B2A;
 }
 
 .divisor-line-container {
@@ -87,15 +117,9 @@
     margin-bottom: 1rem;
 }
 
-.divisor-line {
-    width: 80vw;
-    height: 12px;
-    background-color: #322B2A;
-}
+/* ESTILOS ESTADISTICAS DE PREPARACION */
 
-.graph-container {
-    width: 100%;
-}
+/* Titulos */
 
 .title-container {
     text-align: center;
@@ -106,6 +130,12 @@
     font-size: 1.6rem;
     font-weight: 700;
     margin-bottom: 2rem;
+}
+
+/* Estilos Graficos */
+
+.graph-container {
+    width: 100%;
 }
 
 .column-chart {
@@ -183,12 +213,24 @@
     .title-container h2 {
         font-size: 1.2rem;
     }
+
+    .text-percentage {
+        font-size: 1.4rem;
+    }
+
+    .text-chart {
+        font-size: 1.1rem;
+    }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 568px) {
     .module-practice-title h2 {
         width: 100%;
         font-size: 1.5rem;
+    }
+
+     .text-percentage {
+        font-size: 1.9rem;
     }
 }
 
@@ -201,357 +243,5 @@
     .header-container div i {
         color: #322B2A;
         font-size: 1.8rem;
-    }
-}
-
-/* Test Page */
-
-.main-container-test {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.exit-test-icon {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-
-.header-container div button i {
-    font-size: 2.6rem;
-    color: #FA3B2D;
-}
-
-.question-counter {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    padding: 0.7rem;
-}
-
-.question-counter-text {
-    font-size: 1.6rem;
-    font-weight: 650;
-    color: #A55A55;
-}
-
-.title-test {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    left: 50%;
-    top: 35px;
-    transform: translateX(-50%);
-    color: #CF4037;
-}
-
-/* Header Media Queries */
-
-@media screen and (max-width:768px) {
-    .title-test {
-        top: 60px;
-        color: #CF4037;
-    }
-
-    .title-test h1 {
-        font-size: 1.8rem;
-    }
-
-    .question-counter-text {
-        font-size: 1.2rem;
-        font-weight: 650;
-        color: #A55A55;
-    }
-
-    .container-exit-icon h2 {
-        margin-bottom: 0rem;
-        padding-left: 1rem;
-        font-size: 1.6rem;
-    }
-
-    .header-container div button i {
-        font-size: 2rem;
-        color: #FA3B2D;
-    }
-}
-
-.finish-practice-container {
-    position: absolute;
-    bottom: 30px;
-    right: 0px;
-}
-
-.finish-practice-button {
-    background-color: transparent;
-    border: none;
-    color: #FA3B2D;
-    font-size: 1.6rem;
-    font-weight: 600;
-}
-
-.finish-practice-button:hover {
-    text-decoration: underline 0.2rem #FA3B2D solid;
-}
-
-.question-container {
-    display: flex;
-}
-
-.question-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.question-title {
-    position: relative;
-}
-
-.question-title h3 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 3.5rem;
-}
-
-.answer-state {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -50px;
-}
-
-.answer-state small {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #FA3B2D;
-}
-
-.question-title h3 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 3.5rem;
-}
-
-.question-content-container {
-    width: 50%;
-}
-
-.answer-container {
-    border: 0.2rem #322B2A solid;
-    border-radius: 0.7rem;
-    margin-bottom: 2.5rem;
-    padding: .7rem .5rem;
-    position: relative;
-}
-
-.correct-answer-icon-container {
-    position: absolute;
-    top: -3px;
-    right: -45px;
-}
-
-.correct-answer-icon-container i {
-    font-size: 2.3rem;
-    cursor: default;
-}
-
-.wrong-answer-icon-container {
-    position: absolute;
-    top: -10px;
-    right: -50px;
-}
-
-.wrong-answer-icon-container i {
-    font-size: 3rem;
-    cursor: default;
-}
-
-/* Ocultar el radio button original */
-.radio-style {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-/* Crear el cuadro personalizado */
-.radio-style+label {
-    position: relative;
-    padding-left: 35px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    user-select: none;
-}
-
-/* Crear el cuadro personalizado (no seleccionado) */
-.radio-style+label::before {
-    content: '';
-    position: absolute;
-    left: 0px;
-    top: 50%;
-    width: 20px;
-    margin-top: -10px;
-    /* Mitad de la altura para ajustar el centro */
-    height: 20px;
-    border: 2px solid #FA3B2D;
-    background-color: white;
-    border-radius: 3px;
-    /* Bordes ligeramente redondeados */
-}
-
-/* Crear el símbolo de check cuando está seleccionado */
-.radio-style:checked+label::after {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 50%;
-    margin-top: -7px;
-    /* Mitad de la altura para ajustar el centro */
-    width: 6px;
-    height: 12px;
-    border: solid #FA3B2D;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-/* Cambiar el fondo del cuadro cuando está seleccionado */
-.radio-style:checked+label::before {
-    background-color: white;
-}
-
-/* Estilo para el foco */
-.radio-style:focus+label::before {
-    box-shadow: 0 0 0 3px rgba(250, 59, 45, 0.3);
-}
-
-.not-selected-answer {
-    opacity: 0.4;
-}
-
-.selected-answer {
-    color: #FA3B2D;
-}
-
-.button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.button-container button {
-    background-color: #CF4037;
-    color: #fff;
-    border: none;
-    border-radius: 1.5rem;
-    padding: .8rem 1rem;
-    width: 70%;
-    margin-bottom: 1.5rem;
-    position: relative;
-    transition: all 0.3s ease-in-out;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(207, 64, 55, 0.3);
-    cursor: pointer;
-}
-
-/* Efecto hover básico */
-.button-container button:hover {
-    background-color: #E84C42;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(207, 64, 55, 0.5);
-}
-
-/* Añadimos un pseudo-elemento para efecto de brillo */
-.button-container button::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: rgba(255, 255, 255, 0.1);
-    transform: rotate(45deg);
-    transition: all 0.5s ease-in-out;
-    opacity: 0;
-}
-
-.button-container button:hover::before {
-    opacity: 1;
-    animation: shine 1.2s infinite;
-}
-
-/* Animación de pulso */
-.button-container button:hover {
-    animation: pulse 1.2s infinite;
-}
-
-/* Keyframes para animación de pulso */
-@keyframes pulse {
-    0% {
-        transform: scale(1) translateY(-3px);
-    }
-
-    50% {
-        transform: scale(1.03) translateY(-3px);
-    }
-
-    100% {
-        transform: scale(1) translateY(-3px);
-    }
-}
-
-/* Keyframes para animación de brillo */
-@keyframes shine {
-    0% {
-        left: -100%;
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 0.2;
-    }
-
-    100% {
-        left: 100%;
-        opacity: 0;
-    }
-}
-
-/* Añadimos un efecto de texto más vibrante en hover */
-.button-container button:hover {
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
-    letter-spacing: 0.5px;
-}
-
-.button-container button:disabled {
-    background-color: #A55A55;
-    cursor: default;
-}
-
-.button-container button:disabled:hover {
-    animation: none;
-}
-
-@media screen and (max-width: 768px) {
-    .question-content-container {
-        width: 90%;
-    }
-
-    .question-title {
-        width: 100%;
-    }
-
-    .question-title h3 {
-        width: 100%;
-        font-size: 1.4rem;
-    }
-
-    .button-container button {
-        width: 100%;
     }
 }

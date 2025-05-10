@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../../styles-pages/module-practice.module.css"
+import styles from "../styles/test-page.module.css"
 
 const QuestionsCounter = ({totalQuestions, currentQuestion} : {totalQuestions : number, currentQuestion: number}) => {
     return <>

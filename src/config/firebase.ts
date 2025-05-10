@@ -68,7 +68,7 @@ export const saveResultsTest = async ({ testId, score, answers, duration, questi
 
 //Función para guardar prácticas del modulo.
 
-export const saveModulePractice : SaveResultsModulePractice = async (testId, score, answers) => {
+export const saveModulePractice : SaveResultsModulePractice = async (testId, score, answers, module_number) => {
   try {
     const user = auth.currentUser;
     if (!user) {
@@ -82,6 +82,7 @@ export const saveModulePractice : SaveResultsModulePractice = async (testId, sco
       secondsSinceMidNight: getCurrentSecondsSinceMidNight(),
       score,
       answers,
+      module_number,
     }
 
     //Guardar en FireStore

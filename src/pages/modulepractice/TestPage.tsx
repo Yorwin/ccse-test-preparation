@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../styles-pages/module-practice.module.css"
+import styles from "./styles/test-page.module.css"
 import Header from "./components/header-test";
 import LeaveTest from "./components/leaveTestConfirmation"
 import TestResultsPage from "./components/testResultsPage";
@@ -111,7 +111,16 @@ const TestPage = ({ toggleModulePractice, moduleNumber }: TestPageProps) => {
 
     //GUARDAR LAS PREGUNTAS EN EL SERVIDOR.
     const saveQuestionsInServer: saveQuestionsInServer = async (testId, score, answers) => {
-        const modulePractice: string = await saveModulePractice(testId, score, answers);
+
+        let moduleNumber: string | null;
+
+        if (sessionStorage.getItem("module") != null) {
+            moduleNumber = sessionStorage.getItem("module");
+        } else {
+            throw new Error("No fue posible localizar el número del modulo");
+        }
+
+        const modulePractice: string = await saveModulePractice(testId, score, answers, moduleNumber);
         setResultId(modulePractice);
     };
 
