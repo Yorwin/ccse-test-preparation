@@ -249,13 +249,19 @@
         padding: .7rem 3.8rem;
     }
 
-    .main-container-tests h2 {
-        font-size: 1.3rem
+    .main-container-tests small {
+        font-size: 1.3rem;
+        font-weight: 600;
     }
 
-    .main-container-tests small {
-        font-size: 1.4rem;
-        font-weight: 600;
+    .parragraph-simulated-hours {
+        font-size: 1.3rem;
+    }
+
+    /* Approved Tests */
+
+    .main-container-tests h2 {
+        font-size: 1rem
     }
 
     /* Week History */
@@ -427,7 +433,7 @@
         width: 5vh;
         height: 5vh;
     }
-    
+
     .container-icon i {
         background-color: #FA3B2D;
         border-radius: 50%;

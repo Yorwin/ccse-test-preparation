@@ -4,6 +4,22 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../config/firebase";
 import LoadingScreen from "../../../components/LoadingScreen";
 
+interface testValue {
+    id: string,
+    score: number,
+}
+
+interface preparedData {
+    moduleName: string,
+    correctAnswers: number,
+    totalQuestions: number,
+    preparationPercentage: number,
+}
+
+interface totalQuestions {
+    [moduleName: string]: number,
+}
+
 const ColumnChart = () => {
 
     const user = auth.currentUser;
@@ -13,11 +29,8 @@ const ColumnChart = () => {
     }
 
     const [loading, setLoading] = useState(false);
-    const [moduleData, setModuleData] = useState<any[]>([]);
-    const [chartData, setChartData] = useState<any[]>([65, 75, 45, 80, 70]);
+    const [chartData, setChartData] = useState<number[]>([65, 75, 45, 80, 70]);
     const [svgHeight, setSvgHeight] = useState(450);
-
-    const [moduleLength, setModuleLength] = useState({});
 
     const getAmountOfQuestions = async () => {
         try {
@@ -30,7 +43,7 @@ const ColumnChart = () => {
                 moduleCounts[`Modulo_${modNumber}`] = questionsSnap.size;
             }
 
-            setModuleLength([moduleCounts]);
+            return [moduleCounts];
         } catch (error) {
             console.error("No se puedo obtener el total de preguntas correctamente");
         }
@@ -43,7 +56,7 @@ const ColumnChart = () => {
         );
 
         const querySnapshot = await getDocs(q);
-        const results: any[] = [];
+        const results: testValue[] = [];
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
@@ -56,7 +69,6 @@ const ColumnChart = () => {
         return results;
     };
 
-
     const fetchAllModules = async () => {
         try {
             setLoading(true);
@@ -67,9 +79,11 @@ const ColumnChart = () => {
             });
 
             const allModuleResults = await Promise.all(modulePromises);
-            await getAmountOfQuestions();
+            const modulesLength = await getAmountOfQuestions();
 
-            setModuleData(allModuleResults);
+            const preparationData = calculateModulePreparations(allModuleResults, modulesLength ?? []);
+
+            updateModulePreparationPercentage(preparationData);
             setLoading(false);
         } catch (error) {
             console.error("Error al intentar obtener los datos de los módulos:", error);
@@ -77,7 +91,21 @@ const ColumnChart = () => {
         }
     };
 
-    function calculateModulePreparations(responsesByModule: any, totalQuestionsByModule: any) {
+    const updateModulePreparationPercentage = (preparedData: preparedData[]) => {
+
+        const arrayPreparartionPercentage: number[] = [];
+
+        preparedData.forEach((element: any) => {
+            arrayPreparartionPercentage.push(element.preparationPercentage);
+        })
+
+        setChartData(arrayPreparartionPercentage);
+    };
+
+    function calculateModulePreparations(responsesByModule: testValue[][], totalQuestionsByModule: totalQuestions[]) {
+
+        console.log(totalQuestionsByModule);
+
         // Verificamos que totalQuestionsByModule exista y tenga al menos un elemento
         const totalsObject = totalQuestionsByModule &&
             totalQuestionsByModule.length > 0 ?
@@ -107,12 +135,14 @@ const ColumnChart = () => {
             const preparationPercentage = totalQuestions === 0 ?
                 0 : Math.round((correctAnswers / totalQuestions) * 100);
 
-            return {
+            const preparedData = {
                 moduleName,
                 correctAnswers,
                 totalQuestions,
                 preparationPercentage
-            };
+            }
+
+            return preparedData;
         });
 
         return modulePreparations;
@@ -136,11 +166,6 @@ const ColumnChart = () => {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-    useEffect(() => {
-        const evaluations = calculateModulePreparations(moduleData, moduleLength);
-        console.log(evaluations);
-    }, [moduleData, moduleLength]);
 
     const svgWidth = 1100;
     const padding = { top: 40, right: 40, bottom: 60, left: 60 };

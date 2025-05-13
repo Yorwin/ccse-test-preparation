@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import noInfoImage from "../resources/undraw_page-eaten_b2rt.svg"
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { auth } from "../config/firebase";
 import { getFullDate } from "../functions/functions";
@@ -24,14 +24,14 @@ const HistoryOfSimulations = ({ showSimulationResult }: historyProps) => {
 
     const getResults = async () => {
         const resultsRef = collection(db, "users", user.uid, "resultados");
-        const snapshot = await getDocs(resultsRef);
 
-        const data = snapshot.docs.map(doc => {
-            return {
-                id: doc.id,
-                ...doc.data()
-            }
-        });
+        const q = query(resultsRef, where("testId", "==", "test_simulation"));
+        const snapshot = await getDocs(q);
+
+        const data = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
 
         return data;
     };

@@ -14,3 +14,10 @@
     border-radius: 0.5rem;
     padding: 0.5rem .9rem;
 }
+
+@media screen and (max-width: 576px) {
+    .control-simuation-buttons-main-container button {
+        padding: 0.4rem .6rem;
+        font-size: 0.8rem;
+    }
+}

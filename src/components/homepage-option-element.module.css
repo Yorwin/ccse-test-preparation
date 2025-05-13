@@ -21,10 +21,37 @@
 
 .contenedor-texto a {
     text-decoration: none;
-} 
+}
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
+
+    /* Contenedor */
     .contenedor-opcion {
         padding-left: 2rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+
+    /* Contenedor */
+    .contenedor-opcion {
+        padding-left: 0rem;
+    }
+
+    /* Icono */
+
+    .contenedor-opcion i {
+        font-size: 2.5rem;
+    }
+
+    /* Titulo */
+    .contenedor-texto h3 {
+        font-size: 1.3rem;
+    }
+
+    /* Descripcion */
+    .contenedor-texto p {
+        font-size: .8rem;
+        max-width: 100%;
     }
 }

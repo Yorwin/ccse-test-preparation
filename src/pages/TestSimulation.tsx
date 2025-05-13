@@ -99,16 +99,16 @@ const TestSimulation = () => {
 
         //Sumar total
         let total = modulosData.reduce((sum, item) => sum + item.quantity, 0);
-        
+
         //Obtener duración.
         let getDuration = Number(sessionStorage.getItem("cronometro"));
-        
+
         //Obtener puntaje.
         let score = 0;
 
         //Obtener preguntas. 
 
-        let arrayAllQuestions : any[] = [];
+        let arrayAllQuestions: any[] = [];
 
         for (let i = 1; i <= 5; i++) {
             const gottenItem = sessionStorage.getItem(`questions-module-Modulo_${i}`);
@@ -152,7 +152,7 @@ const TestSimulation = () => {
             score: score,
             answers: arrayAllAnswers,
             duration: getDuration,
-            questions: arrayAllQuestions, 
+            questions: arrayAllQuestions,
         }
     };
 
