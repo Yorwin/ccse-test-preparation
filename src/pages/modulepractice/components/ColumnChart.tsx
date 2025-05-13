@@ -29,7 +29,7 @@ const ColumnChart = () => {
     }
 
     const [loading, setLoading] = useState(false);
-    const [chartData, setChartData] = useState<number[]>([65, 75, 45, 80, 70]);
+    const [chartData, setChartData] = useState<number[]>([0, 0, 0, 0, 0]);
     const [svgHeight, setSvgHeight] = useState(450);
 
     const getAmountOfQuestions = async () => {
@@ -103,9 +103,6 @@ const ColumnChart = () => {
     };
 
     function calculateModulePreparations(responsesByModule: testValue[][], totalQuestionsByModule: totalQuestions[]) {
-
-        console.log(totalQuestionsByModule);
-
         // Verificamos que totalQuestionsByModule exista y tenga al menos un elemento
         const totalsObject = totalQuestionsByModule &&
             totalQuestionsByModule.length > 0 ?
@@ -122,27 +119,47 @@ const ColumnChart = () => {
             // Obtiene el nombre del módulo
             const moduleName = `Modulo_${index + 1}`;
 
-            // Calcula la suma de scores para este módulo de manera segura
-            const correctAnswers = safeModuleResponses.reduce((sum, response) => {
+            // Obtenemos el total de preguntas para este módulo de manera segura
+            const totalQuestions = safeModuleTotals[moduleName] || 0;
+
+            // Si no hay respuestas, retornamos 0%
+            if (safeModuleResponses.length === 0) {
+                return {
+                    moduleName,
+                    correctAnswers: 0,
+                    totalQuestions,
+                    preparationPercentage: 0,
+                    testsMade: 0
+                };
+            }
+
+            // Calculamos el promedio de las puntuaciones de todos los tests realizados
+            // Para cada test, calculamos su porcentaje individual y luego promediamos
+            let testScores = safeModuleResponses.map(response => {
                 // Verificamos que response y response.score existan
+                const score = response && typeof response.score === 'number' ? response.score : 0;
+                // Calculamos el porcentaje para este test individual
+                return totalQuestions === 0 ? 0 : (score / totalQuestions) * 100;
+            });
+
+            // Promediamos los porcentajes de todos los tests
+            const averageScore = testScores.reduce((sum, score) => sum + score, 0) / testScores.length;
+
+            // Redondeamos el resultado final
+            const preparationPercentage = Math.round(averageScore);
+
+            // Suma total de respuestas correctas (para referencia)
+            const correctAnswers = safeModuleResponses.reduce((sum, response) => {
                 return sum + (response && typeof response.score === 'number' ? response.score : 0);
             }, 0);
 
-            // Obtiene el total de preguntas para este módulo de manera segura
-            const totalQuestions = safeModuleTotals[moduleName] || 0;
-
-            // Calcula el porcentaje de preparación para este módulo
-            const preparationPercentage = totalQuestions === 0 ?
-                0 : Math.round((correctAnswers / totalQuestions) * 100);
-
-            const preparedData = {
+            return {
                 moduleName,
                 correctAnswers,
                 totalQuestions,
-                preparationPercentage
-            }
-
-            return preparedData;
+                preparationPercentage,
+                testsMade: safeModuleResponses.length
+            };
         });
 
         return modulePreparations;
