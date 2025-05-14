@@ -1,17 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import styles from '../styles-pages/results.module.css'
-import TituloGenerico from "../components/titulo-generico";
-import ArrowGoBack from "../components/arrow-go-back";
-import GraphicTestsMade from "../components/graphic-tests-made";
-import GraphicHoursSimulated from "../components/graphic-hours-simulated";
-import GraphRightTestsPercentage from "../components/graph-percentage-right-answers";
-import GraphicWeekSummary from "../components/graphic-week-summary";
-import HistoryOfSimulations from "../components/history-of-simulations";
-import SimulationResults from "../components/simulation-results";
-import { db } from "../config/firebase";
-import { auth } from "../config/firebase";
+import styles from '../../styles-pages/results.module.css'
+import TituloGenerico from "../../components/titulo-generico";
+import ArrowGoBack from "../../components/arrow-go-back";
+import GraphicTestsMade from "./components/graphic-tests-made";
+import GraphicHoursSimulated from "./components/graphic-hours-simulated";
+import GraphRightTestsPercentage from "./components/graph-percentage-right-answers";
+import GraphicWeekSummary from "./components/graphic-week-summary";
+import HistoryOfSimulations from "./components/history-of-simulations";
+import SimulationResults from "./components/simulation-results/simulation-results";
+import { db } from "../../config/firebase";
+import { auth } from "../../config/firebase";
 import { getDocs, collection } from "firebase/firestore";
 
 const Results = () => {

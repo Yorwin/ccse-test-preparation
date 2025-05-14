@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import ProfileDefaultImg from "../resources/profile-default.jpg"
 import { signOut } from 'firebase/auth'
 import { auth } from '../config/firebase'
@@ -53,15 +54,20 @@ const ProfileSection = () => {
             <ul>
                 <li>
                     <i className="bi bi-person"></i>
-                    <a href="#"><small>Perfil</small></a>
+                    {userInfo !== null && <a href="#"><small>Perfil</small></a>}
                 </li>
                 <li>
                     <i className="bi bi-gear"></i>
-                    <a href="#"><small>Configuraciones</small></a>
+                    {userInfo !== null && <Link to="/settings"><small>Configuraciones</small></Link>}
                 </li>
                 <li onClick={logoutUser}>
                     <i className="bi bi-box-arrow-right"></i>
-                    <a href="#"><small>Cerrar sesión</small></a>
+                    {userInfo !== null && <a href="#" onClick={(e) => {
+                        e.preventDefault(); // Prevenir comportamiento por defecto del enlace
+                        logoutUser();
+                    }}>
+                        <small>Cerrar sesión</small>
+                    </a>}
                 </li>
             </ul>
         </div>

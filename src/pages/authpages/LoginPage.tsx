@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import styles from "../styles-pages/authorization-pages.module.css"
+import styles from "../../styles-pages/authorization-pages.module.css"
 import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase"
+import { auth } from "../../config/firebase"
 import { useNavigate } from "react-router-dom";
-import RecoverPassword from "../components/RecoverPasword";
+import RecoverPassword from "../../components/RecoverPasword";
 
 const LoginPage = () => {
 

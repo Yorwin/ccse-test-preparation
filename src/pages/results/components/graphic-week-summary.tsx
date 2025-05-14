@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
-import styles from "./graphic-test-made.module.css"
-import { db } from "../config/firebase";
+import styles from "../styles/graphic-test-made.module.css"
+import { db, auth } from "../../../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { auth } from "../config/firebase";
-import { getFullDate, getDaysInMonth, getCurrentMonth, getCurrentDay } from "../functions/functions";
+import { getFullDate, getDaysInMonth, getCurrentMonth, getCurrentDay } from "../../../functions/functions";
 
 interface weekItem {
     weekDay: string,

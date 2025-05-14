@@ -2,18 +2,18 @@ import React from 'react';
 import './App.css';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/homepage/HomePage';
 import ProfilePage from './pages/ProfilePage';
-import TestSimulation from './pages/TestSimulation';
+import TestSimulation from './pages/testsimulation/TestSimulation';
 import Settings from './pages/Settings';
 import ModulePractice from './pages/modulepractice/ModulePractice';
-import Results from './pages/Results';
-import Recommendations from './pages/Recommendations';
+import Results from './pages/results/Results';
+import Recommendations from './pages/recommendations/Recommendations';
 import Root from './pages/Root';
-import AuthLayout from './pages/AuthLayout';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import RecoverPasswordPage from './pages/RecoverPasswordPage';
+import AuthLayout from './pages/authpages/AuthLayout';
+import LoginPage from './pages/authpages/LoginPage';
+import RegisterPage from './pages/authpages/RegisterPage';
+import RecoverPasswordPage from './pages/recover-password/RecoverPasswordPage';
 
 const appRouter = createBrowserRouter(createRoutesFromElements(
   <>

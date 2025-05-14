@@ -1,9 +1,8 @@
 import React from "react";
-import styles from '../styles-pages/recommendations.module.css'
-import TituloGenerico from "../components/titulo-generico";
-import ArrowGoBack from "../components/arrow-go-back";
+import styles from '../../styles-pages/recommendations.module.css'
+import TituloGenerico from "../../components/titulo-generico";
+import ArrowGoBack from "../../components/arrow-go-back";
 import { Link } from "react-router-dom";
-import ContainerModel from "../components/container-model";
 
 const Recommendations = () => {
     return <>

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../components/progress-next-back-results.module.css"
+import styles from "./styles/progress-next-back-results.module.css"
 
 interface directionArrowsAndModule {
     goBack: () => void,

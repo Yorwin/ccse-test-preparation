@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "../styles-pages/authorization-pages.module.css"
+import styles from "../../styles-pages/authorization-pages.module.css"
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
-import { db } from '../config/firebase'
+import { db } from '../../config/firebase'
 import { useNavigate } from "react-router-dom";
-import useForm from "../hooks/useForm";
+import useForm from "../../hooks/useForm";
 
 type RegisterType = (auth: any, email: string, password: string, name: string) => void;
 
@@ -131,7 +131,7 @@ const RegisterPage = () => {
                             {errors.password_register && errors.password_register !== "Campo obligatorio" && (
                                 <p className={styles["error-message-register-input"]}>{errors.password_register}</p>
                             )}
-                            
+
                         </div>
 
                         {errors.submit && <p className={styles["errors"]}>{errors.submit}</p>}

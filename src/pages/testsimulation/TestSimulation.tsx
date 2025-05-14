@@ -1,21 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
-import ExitTestIcon from "../components/exit-test-icon";
-import Counter from "../components/counter-test-simulation";
-import { CounterProvider } from "../context/SimulationCounterContext";
-import TaskControl from "../components/TaskControl";
-import ProgressBar from "../components/progress-bar";
-import ArrowGoBack from "../components/arrow-go-back";
-import QuestionGenerator from "../components/question-generator";
-import FinishTestMessage from "../components/finishTestSimulation";
+import ExitTestIcon from "../../components/exit-test-icon";
+import Counter from "./components/counter-test-simulation";
+import { CounterProvider } from "../../context/SimulationCounterContext";
+import TaskControl from "../../components/TaskControl"
+import ProgressBar from "./components/progress-bar";
+import ArrowGoBack from "../../components/arrow-go-back";
+import QuestionGenerator from "./components/question-generator";
+import FinishTestMessage from "./components/finishTestSimulation";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
-import CheckTestSimulation from "../components/checkTestSimulation";
-import TestResults from "../components/testResults";
-import { saveResultsTest } from "../config/firebase";
-import styles from "../styles-pages/test-simulation.module.css";
-import ControlSimulationButtons from "../components/control-simulation-buttons";
-import LoadingScreen from "../components/LoadingScreen";
+import { db } from "../../config/firebase";
+import CheckTestSimulation from "../../components/checkTestSimulation";
+import TestResults from "../../components/testResults";
+import { saveResultsTest } from "../../config/firebase";
+import styles from "../../styles-pages/test-simulation.module.css";
+import ControlSimulationButtons from "./components/control-simulation-buttons";
+import LoadingScreen from "../../components/LoadingScreen";
 
 type Pregunta = {
     id: string;

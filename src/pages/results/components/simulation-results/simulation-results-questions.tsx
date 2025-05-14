@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../styles-pages/results.module.css"
+import styles from "../../../../styles-pages/results.module.css"
 
 interface Questions {
     id?: string,

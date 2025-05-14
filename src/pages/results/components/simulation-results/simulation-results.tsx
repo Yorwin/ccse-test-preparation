@@ -1,12 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import TaskControl from "./TaskControl";
-import ProgressNextBack from "./progress-next-back-results";
+import TaskControl from "../../../../components/TaskControl";
+import ProgressNextBack from "../simulation-results/progress-next-back-results";
 import SimulationResultQuestions from "./simulation-results-questions";
 import ControlBar from "./simulation-results-control-bar";
-import styles from '../styles-pages/results.module.css'
+import styles from '../../../../styles-pages/results.module.css'
 import { doc, getDoc } from "firebase/firestore";
-import { db, auth } from "../config/firebase";
+import { db, auth } from "../../../../config/firebase";
 
 interface historyProps {
     showSimulationResult: (e: any) => void;

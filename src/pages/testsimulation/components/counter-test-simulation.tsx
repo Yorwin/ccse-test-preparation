@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useCounter } from "../context/SimulationCounterContext";
-import styles from "./counter-test-simulation.module.css"
+import { useCounter } from "../../../context/SimulationCounterContext";
+import styles from "../styles/counter-test-simulation.module.css"
 
 const Counter = () => {
 

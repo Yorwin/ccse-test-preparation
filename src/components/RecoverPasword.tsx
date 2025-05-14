@@ -13,6 +13,7 @@ const RecoverPassword = ({ show }: ButtonProps) => {
     const [message, setMessage] = useState<React.ReactNode>(<></>);
     const [emailSent, setEmailSent] = useState(false);
     const [submit, setSubmit] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const messageContent = (
         <div className={styles["message-recover-container"]}>
@@ -32,27 +33,45 @@ const RecoverPassword = ({ show }: ButtonProps) => {
     const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setEmailRecover(value);
+        // Limpiar mensaje de error cuando el usuario escribe
+        if (errorMessage) {
+            setErrorMessage("");
+        }
     }
 
     const handleResetPassword = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSubmit(true);
+        setErrorMessage("");
 
         try {
+            // Primero intentamos enviar el correo directamente
             await sendPasswordResetEmail(auth, emailRecover);
+
+            // Si llega aquí sin error, el correo existe
             setSubmit(false);
             setMessage(messageContent);
             setEmailSent(true);
-        } catch (error) {
 
+        } catch (error) {
             setSubmit(false);
-            let errorMessage = "You have experienced an unknowed error"
 
             if (error instanceof Error) {
-                errorMessage = error.message;
-            }
+                const errorCode = error.message;
 
-            setMessage("❌ Error: " + errorMessage);
+                // Detectar si el error es porque el usuario no existe
+                if (errorCode.includes("user-not-found") ||
+                    errorCode.includes("auth/user-not-found") ||
+                    errorCode.includes("no user record")) {
+                    setErrorMessage("❌ El correo ingresado no tiene una cuenta vinculada en el sistema.");
+                } else {
+                    // Otro tipo de error (red, servidor, etc.)
+                    console.error("Error en recuperación:", error);
+                    setErrorMessage("❌ Error: Ha ocurrido un problema al procesar tu solicitud.");
+                }
+            } else {
+                setErrorMessage("❌ Error desconocido al enviar el correo de recuperación.");
+            }
         }
     };
 
@@ -74,6 +93,12 @@ const RecoverPassword = ({ show }: ButtonProps) => {
                                     value={emailRecover}
                                     onChange={(e) => handleEmailChange(e)}
                                     required />
+
+                                {errorMessage && (
+                                    <div className={styles["error-message"]}>
+                                        {errorMessage}
+                                    </div>
+                                )}
 
                                 <button type="submit" className={styles["button"]}>{submit ? (
                                     <div className="d-flex justify-content-center align-items-center">

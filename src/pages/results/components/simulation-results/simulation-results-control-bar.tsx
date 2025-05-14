@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles-pages/results.module.css";
+import styles from "../../../../styles-pages/results.module.css";
 
 interface answers {
     [key: string]: number;

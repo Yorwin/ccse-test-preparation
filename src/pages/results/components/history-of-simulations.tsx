@@ -1,10 +1,9 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import noInfoImage from "../resources/undraw_page-eaten_b2rt.svg"
+import noInfoImage from "../../../resources/undraw_page-eaten_b2rt.svg"
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../config/firebase";
-import { auth } from "../config/firebase";
-import { getFullDate } from "../functions/functions";
-import styles from "./graphic-test-made.module.css"
+import { db, auth } from "../../../config/firebase";
+import { getFullDate } from "../../../functions/functions";
+import styles from "../styles/graphic-test-made.module.css"
 
 interface historyProps {
     showSimulationResult: (e: any) => void;

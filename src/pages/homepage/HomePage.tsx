@@ -1,9 +1,9 @@
 import React from "react";
-import Logo from "../components/logo-cervantes"
-import ProfileSection from "../components/profile-section"
-import HomePageOptionElement from "../components/homepage-option-element.";
-import TermsAndConditions from "../components/terms-and-conditions-text";
-import styles from "../styles-pages/homepage.module.css"
+import Logo from "../../components/logo-cervantes"
+import ProfileSection from "../../components/profile-section"
+import HomePageOptionElement from "../homepage/components/homepage-option-element.";
+import TermsAndConditions from "../../components/terms-and-conditions-text";
+import styles from "../../styles-pages/homepage.module.css"
 
 const HomePage = () => {
     return <>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import styles from "./graphic-test-made.module.css"
+import styles from "../styles/graphic-test-made.module.css"
 
 const GraphRightTestsPercentage = ({ totalTests, correctTests }: { totalTests: number, correctTests: number }) => {
 

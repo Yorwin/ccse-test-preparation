@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "../styles-pages/recover-password.module.css"
+import styles from "../../../styles-pages/recover-password.module.css"
 
 const WritingMachineText = () => {
     const text = "Estás siendo redirigido, por favor espera...";

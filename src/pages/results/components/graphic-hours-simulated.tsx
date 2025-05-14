@@ -1,10 +1,9 @@
 import React from "react";
-import styles from "./graphic-test-made.module.css"
+import styles from "../styles/graphic-test-made.module.css"
 import { useEffect, useState } from "react";
-import { db } from "../config/firebase";
-import { auth } from "../config/firebase";
+import { db, auth } from "../../../config/firebase";
 import { getDocs, collection } from "firebase/firestore";
-import { secondstoDecimalHours } from "../functions/functions";
+import { secondstoDecimalHours } from "../../../functions/functions";
 
 const GraphicHoursSimulated = () => {
 

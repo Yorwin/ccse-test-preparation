@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useMemo } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../config/firebase";
-import styles from "./question-generator.module.css"
-
-type cargarPreguntasProp = {
-    quantity: number;
-    module: string;
-    onAnswer: () => void;
-}
+import { db } from "../../../config/firebase";
+import styles from "../styles/question-generator.module.css"
 
 type Pregunta = {
     id: string;
@@ -21,10 +15,26 @@ type UserAnswerType = {
     [key: string]: number;
 }
 
-const QuestionGenerator = ({ quantity, module, onAnswer }: cargarPreguntasProp) => {
+type QuestionGeneratorProps = {
+    quantity: number;
+    module: string;
+    initialQuestions?: Pregunta[];
+    initialUserAnswers?: UserAnswerType;
+    onQuestionsLoaded?: (questions: Pregunta[]) => void;
+    onUserAnswersChange?: (userAnswers: UserAnswerType) => void;
+};
+
+const QuestionGeneratorComponent = ({
+    quantity,
+    module,
+    initialQuestions = [],
+    initialUserAnswers = {},
+    onQuestionsLoaded,
+    onUserAnswersChange }: QuestionGeneratorProps) => {
 
     const [questions, setQuestions] = useState<Pregunta[]>([]);
-    const [userAnswer, setUserAnswer] = useState<UserAnswerType>({});
+    const [userAnswer, setUserAnswer] = useState<UserAnswerType>(initialUserAnswers || {});
+
     const [result, setResult] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -34,16 +44,118 @@ const QuestionGenerator = ({ quantity, module, onAnswer }: cargarPreguntasProp) 
             .sort(() => 0.5 - Math.random())
             .slice(0, quantity);
     };
-    
+
     const obtainRandomQuestions = useMemo(() => shuffleAndSelectQuestions, []);
 
-    const handleAnswerChange = (questionId: string, answerIndex: number) => {
-        setUserAnswer(prevAnswers => ({
-            ...prevAnswers,
-            [questionId]: answerIndex,
-        }));
+    useEffect(() => {
+        const savedAnswers = sessionStorage.getItem(`answers-module-${module}`);
 
-        onAnswer();
+        if (savedAnswers) {
+            setUserAnswer(JSON.parse(savedAnswers));
+        } else {
+            setUserAnswer(initialUserAnswers || {});
+        }
+
+    }, [module, initialUserAnswers]);
+
+    useEffect(() => {
+
+        const loadQuestions = async () => {
+
+            if (sessionStorage.getItem(`questions-module-${module}`)) {
+                let savedQuestions = sessionStorage.getItem(`questions-module-${module}`);
+
+                if (savedQuestions) {
+                    const parsedQuestions = JSON.parse(savedQuestions) as Pregunta[];
+                    setQuestions(parsedQuestions);
+                }
+
+                setLoading(false);
+                return;
+            }
+
+            if (initialQuestions.length > 0) {
+                setQuestions(initialQuestions);
+                setUserAnswer(initialUserAnswers);
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const preguntasRef = collection(db, "preguntas", module, "preguntas");
+                const querySnapShot = await getDocs(preguntasRef);
+
+                if (querySnapShot.empty) {
+                    console.log("No se encontraron preguntas en Firestore para este módulo.");
+                    setQuestions([]);
+                    setLoading(false);
+                    return;
+                }
+
+                const todasLasPreguntas: Pregunta[] = querySnapShot.docs.map((doc) => {
+                    const data = doc.data();
+
+                    if (!data.pregunta) console.warn(`Missing QUESTIONS in doc ${doc.id}`);
+                    if (!Array.isArray(data.respuestas)) console.warn(`Invalid ANSWERS in doc ${doc.id}`);
+                    if (typeof data.correcta !== 'number') console.warn(`Invalid CORRECT ANSWER in doc ${doc.id}`);
+
+                    return {
+                        id: doc.id,
+                        pregunta: data.pregunta,
+                        respuestas: data.respuestas,
+                        correcta: data.correcta,
+                    };
+                });
+
+                let randomQuestions = obtainRandomQuestions(todasLasPreguntas, quantity);
+
+                setQuestions(() => {
+                    return [...randomQuestions] as Pregunta[]
+                });
+
+                if (onQuestionsLoaded) {
+                    sessionStorage.setItem(`questions-module-${module}`, JSON.stringify(randomQuestions));
+                    onQuestionsLoaded(randomQuestions);
+                }
+
+            } catch (error) {
+                console.error("Error cargando las preguntas:", error);
+                setError("Error al cargar las preguntas. Por favor, inténtelo de nuevo.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadQuestions();
+
+    }, [module, quantity, initialQuestions.length]);
+
+    const handleAnswerChange = (questionId: string, answerIndex: number) => {
+
+        const newUserAnswers = {
+            ...userAnswer,
+            [questionId]: answerIndex,
+        };
+
+        setUserAnswer(newUserAnswers);
+
+        if (module.charAt(module.length - 1) === questionId.charAt(questionId.length - 1)) {
+
+            const savedAnswers = sessionStorage.getItem(`answers-module-${module}`);
+            const parsedAnswers = savedAnswers ? JSON.parse(savedAnswers) : {};
+
+            const updatedAnswers = {
+                ...parsedAnswers,
+                [questionId]: answerIndex
+            };
+
+            sessionStorage.setItem(`answers-module-${module}`, JSON.stringify(updatedAnswers));
+        }
+
+        if (onUserAnswersChange) {
+            onUserAnswersChange(newUserAnswers);
+        }
     };
 
     const handleResult = () => {
@@ -57,63 +169,6 @@ const QuestionGenerator = ({ quantity, module, onAnswer }: cargarPreguntasProp) 
 
         setResult(correct);
     };
-
-    useEffect(() => {
-
-        const loadQuestions = async () => {
-            setLoading(true);
-            setQuestions([]);
-
-            try {
-                const preguntasRef = collection(db, "preguntas", module, "preguntas");
-                const querySnapShot = await getDocs(preguntasRef);
-
-                // Verifica cuántos documentos estás recibiendo
-                console.log("Número de preguntas obtenidas:", querySnapShot.size);
-
-                if (querySnapShot.empty) {
-                    console.log("No se encontraron preguntas en Firestore para este módulo.");
-                    setQuestions([]);
-                    setLoading(false);
-                    return;
-                }
-
-                const todasLasPreguntas: Pregunta[] = querySnapShot.docs.map((doc) => {
-                    const data = doc.data(); // Obtener los datos del documento
-
-                    // Validate each expected field
-                    if (!data.pregunta) console.warn(`Missing QUESTIONS in doc ${doc.id}`);
-                    if (!Array.isArray(data.respuestas)) console.warn(`Invalid ANSWERS in doc ${doc.id}`);
-                    if (typeof data.correcta !== 'number') console.warn(`Invalid CORRECT ANSWER in doc ${doc.id}`);
-
-                    return {
-                        id: doc.id,
-                        pregunta: data.pregunta,
-                        respuestas: data.respuestas,
-                        correcta: data.correcta,
-                    };
-                });
-
-                let obtainedQuestions = obtainRandomQuestions(todasLasPreguntas, quantity);
-
-                setQuestions(() => {
-                    return [...obtainedQuestions] as Pregunta[]
-                });
-
-                setUserAnswer({});
-                setResult(null);
-                setError(null);
-            } catch (error) {
-                console.error("Error cargando las preguntas:", error);
-                setError("Error al cargar las preguntas. Por favor, inténtelo de nuevo.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadQuestions();
-
-    }, [module, quantity]);
 
     if (loading) {
         return <div className={styles["loading"]}>Cargando preguntas...</div>;
@@ -157,5 +212,7 @@ const QuestionGenerator = ({ quantity, module, onAnswer }: cargarPreguntasProp) 
         </div>
     </>
 };
+
+const QuestionGenerator = React.memo(QuestionGeneratorComponent);
 
 export default QuestionGenerator;

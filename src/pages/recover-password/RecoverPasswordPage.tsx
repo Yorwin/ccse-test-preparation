@@ -1,22 +1,22 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { auth } from '../config/firebase'
+import { auth } from '../../config/firebase'
 import { verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
-import SpinningElement from "../components/spinning";
-import WritingMachineText from "../components/writing-machine";
-import styles from "../styles-pages/recover-password.module.css"
-import LoadingScreen from "../components/LoadingScreen";
+import SpinningElement from "../recover-password/components/spinning";
+import WritingMachineText from "../recover-password/components/writing-machine";
+import styles from "../../styles-pages/recover-password.module.css"
+import LoadingScreen from "../../components/LoadingScreen";
 
 const RecoverPasswordPage = () => {
 
-    /* Comprobar parametros de la URL */ 
+    /* Comprobar parametros de la URL */
     const [searchParams] = useSearchParams();
 
-    /* Preparamos el useNavigate */ 
+    /* Preparamos el useNavigate */
     const navigate = useNavigate();
 
-    /* Estado y mensaje de error de validación del codigo oobCode */ 
+    /* Estado y mensaje de error de validación del codigo oobCode */
     const [isValidCode, setIsValidCode] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 

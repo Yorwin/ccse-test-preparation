@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { useCounter } from "../context/SimulationCounterContext";
-import styles from "./finishTestMessage.module.css";
+import { useCounter } from "../../../context/SimulationCounterContext";
+import styles from "../styles/finishTestMessage.module.css";
 
 const FinishTestMessage = ({ cancelExitSimulation, continueExitSimulation }: { cancelExitSimulation: () => void, continueExitSimulation: () => void }) => {
 
