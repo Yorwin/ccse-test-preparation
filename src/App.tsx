@@ -5,7 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import HomePage from './pages/homepage/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import TestSimulation from './pages/testsimulation/TestSimulation';
-import Settings from './pages/Settings';
+import Settings from './pages/settings/Settings';
 import ModulePractice from './pages/modulepractice/ModulePractice';
 import Results from './pages/results/Results';
 import Recommendations from './pages/recommendations/Recommendations';

@@ -6,9 +6,17 @@ import { auth } from '../config/firebase'
 import { doc, DocumentData, getDoc } from 'firebase/firestore'
 import { db } from "../config/firebase";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import styles from "./profile-section.module.css"
 
 const ProfileSection = () => {
+
+    const navigate = useNavigate();
+
+    const goToSettings = () => {
+        navigate("/settings");
+    };
+
     const [botonPulsado, setBotonPulsado] = useState(false);
     const [userInfo, setUserInfo] = useState<DocumentData | null>(null);
 
@@ -53,21 +61,28 @@ const ProfileSection = () => {
         <div className={`${styles["menu-bar"]} ${styles["menu-bar-absolute"]}`}>
             <ul>
                 <li>
-                    <i className="bi bi-person"></i>
-                    {userInfo !== null && <a href="#"><small>Perfil</small></a>}
+                    {userInfo !== null &&
+                        <button className={styles["button-menu"]}>
+                            <i className="bi bi-person"></i>
+                            <small>Perfil</small>
+                        </button>}
                 </li>
                 <li>
-                    <i className="bi bi-gear"></i>
-                    {userInfo !== null && <Link to="/settings"><small>Configuraciones</small></Link>}
+                    {userInfo !== null &&
+                        <button className={styles["button-menu"]} onClick={goToSettings}>
+                            <i className="bi bi-gear"></i>
+                            <small>Configuraciones</small>
+                        </button>}
                 </li>
                 <li onClick={logoutUser}>
-                    <i className="bi bi-box-arrow-right"></i>
-                    {userInfo !== null && <a href="#" onClick={(e) => {
-                        e.preventDefault(); // Prevenir comportamiento por defecto del enlace
-                        logoutUser();
-                    }}>
-                        <small>Cerrar sesión</small>
-                    </a>}
+                    {userInfo !== null && <>
+
+                        <button onClick={logoutUser} className={styles["button-menu"]}>
+                            <i className="bi bi-box-arrow-right"></i>
+                            <small>Cerrar sesión</small>
+                        </button>
+                    </>
+                    }
                 </li>
             </ul>
         </div>
